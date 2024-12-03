@@ -1,0 +1,15 @@
+spring.application.name: MoveMint-server
+authentication:
+  jwt:
+    issuer: MoveMint
+    key: /o085QAEwgKI/lTY2aNd/LmKdLrgDigo61MMyYriIjsv14cuqFI6AdDcIOFx+fegqHKMG/zM4qFlhBWjkyOqw==
+    validity: 300
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/MoveMint
+    username: postgres
+    password: password
+  jpa:
+    hibernate:
+      ddl-auto: update
