@@ -10,6 +10,11 @@ import jakarta.validation.constraints.Past;
 import java.time.LocalDate;
 import java.util.UUID;
 
+/**
+ * User entity.
+ *
+ * @author Anton Skripin (anton.tech98@gmail.com)
+ */
 @Entity
 @Table(name = "users")
 public class User {
@@ -20,9 +25,9 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @Email(message = "A valid email address must be provided")
+    @Email(message = "A valid username must be provided")
     @Column(nullable = false, unique = true)
-    private String email;
+    private String username;
 
     @Column(nullable = false)
     @Past(message = "Date of birth must be in the past")
@@ -31,20 +36,39 @@ public class User {
     protected User() {
     }
 
-    public static User createUser(String password, String email, LocalDate dateOfBirth) {
+    /**
+     * Creates a new user
+     *
+     * @param password    encoded password
+     * @param username    username
+     * @param dateOfBirth date of birth
+     * @return user
+     */
+    public static User createUser(String password, String username, LocalDate dateOfBirth) {
         User user = new User();
         user.id = UUID.randomUUID();
         user.password = password;
-        user.email = email;
+        user.username = username;
         user.dateOfBirth = dateOfBirth;
         return user;
     }
 
-    public void updateUser(String email, LocalDate dateOfBirth) {
-        this.email = email;
+    /**
+     * Updates user details
+     *
+     * @param username    username
+     * @param dateOfBirth date of birth
+     */
+    public void updateUser(String username, LocalDate dateOfBirth) {
+        this.username = username;
         this.dateOfBirth = dateOfBirth;
     }
 
+    /**
+     * Resets the password
+     *
+     * @param newPassword encoded password
+     */
     public void resetPassword(String newPassword) {
         this.password = newPassword;
     }
@@ -57,8 +81,8 @@ public class User {
         return password;
     }
 
-    public String getEmail() {
-        return email;
+    public String getUsername() {
+        return username;
     }
 
     public LocalDate getDateOfBirth() {

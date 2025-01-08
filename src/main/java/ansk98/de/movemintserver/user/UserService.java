@@ -1,11 +1,20 @@
 package ansk98.de.movemintserver.user;
 
+import ansk98.de.movemintserver.auth.RegisterUserCommand;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.Optional;
 
+/**
+ * Implementation of {@link IUserService}.
+ *
+ * @author Anton Skripin (anton.tech98@gmail.com)
+ */
 @Service
 public class UserService implements IUserService {
 
@@ -20,24 +29,24 @@ public class UserService implements IUserService {
 
     @Override
     @Transactional(readOnly = true)
-    public UserDto findUserBy(String email) {
+    public UserDto findUserBy(String username) {
         return userRepository
-                .findByEmail(email)
-                .map(UserDto::new)
-                .orElseThrow(() -> new UserNotFoundException("User with email " + email + " not found"));
+                .findByUsername(username)
+                .map(UserDto::from)
+                .orElseThrow(() -> new UserNotFoundException("User with username " + username + " not found"));
     }
 
     @Override
     @Transactional
-    public UserDto createUser(CreateUserCommand command) {
-        if (userRepository.existsByEmail(command.email())) {
-            throw new EmailTakenException("User with email " + command.email() + " already exists");
+    public UserDto createUser(RegisterUserCommand command) {
+        if (userRepository.existsByUsername(command.username())) {
+            throw new UsernameTakenException("User with username " + command.username() + " already exists");
         }
 
-        User user = User.createUser(passwordEncoder.encode(command.password()), command.email(), command.dateOfBirth());
+        User user = User.createUser(passwordEncoder.encode(command.password()), command.username(), command.dateOfBirth());
 
         return Optional.of(userRepository.save(user))
-                .map(UserDto::new)
+                .map(UserDto::from)
                 .get();
     }
 
@@ -45,18 +54,26 @@ public class UserService implements IUserService {
     @Transactional
     public UserDto updateUser(UpdateUserCommand command) {
         User user = userRepository
-                .findById(command.identifier())
-                .orElseThrow(() -> new UserNotFoundException("User with id " + command.identifier() + " not found"));
-        user.updateUser(command.email(), command.dateOfBirth());
+                .findByUsername(command.username())
+                .orElseThrow(() -> new UserNotFoundException("User with username " + command.username() + " not found"));
+        user.updateUser(command.username(), command.dateOfBirth());
 
-        return new UserDto(user);
+        return UserDto.from(user);
     }
 
     @Override
+    @Transactional
     public void resetPassword(ResetPasswordCommand command) {
-        User user = userRepository.findByEmail(command.email())
-                .orElseThrow(() -> new UserNotFoundException("User with email " + command.email() + " not found"));
+        User user = userRepository.findByUsername(command.username())
+                .orElseThrow(() -> new UserNotFoundException("User with username " + command.username() + " not found"));
 
         user.resetPassword(command.password());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException("User not found with username " + username));
+        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), Collections.emptyList());
     }
 }

@@ -4,7 +4,13 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Past;
 
 import java.time.LocalDate;
-import java.util.UUID;
 
-public record UpdateUserCommand(UUID identifier, @Email String email, @Past LocalDate dateOfBirth) {
+/**
+ * Command to update user details.
+ *
+ * @param username
+ * @param dateOfBirth
+ * @author Anton Skripin (anton.tech98@gmail.com)
+ */
+public record UpdateUserCommand(@Email String username, @Past LocalDate dateOfBirth) {
 }

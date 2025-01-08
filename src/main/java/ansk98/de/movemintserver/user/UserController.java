@@ -3,6 +3,11 @@ package ansk98.de.movemintserver.user;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * Controller to manage the state of a user.
+ *
+ * @author Anton Skripin (anton.tech98@gmail.com)
+ */
 @RestController
 @RequestMapping("/public/user")
 public class UserController {
@@ -11,11 +16,6 @@ public class UserController {
 
     public UserController(IUserService userService) {
         this.userService = userService;
-    }
-
-    @PostMapping("/new")
-    public UserDto createUser(@RequestBody @Valid CreateUserCommand command) {
-        return userService.createUser(command);
     }
 
     @PutMapping("/update")

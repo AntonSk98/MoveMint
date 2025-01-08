@@ -4,14 +4,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
- * Exception in case a user does not exist.
+ * Exception if the given username is already taken.
  *
  * @author Anton Skripin (anton.tech98@gmail.com)
  */
-@ResponseStatus(HttpStatus.NOT_FOUND)
-public class UserNotFoundException extends RuntimeException {
+@ResponseStatus(HttpStatus.BAD_REQUEST)
+public class UsernameTakenException extends RuntimeException {
 
-    public UserNotFoundException(String message) {
+    public UsernameTakenException(String message) {
         super(message);
     }
 }
