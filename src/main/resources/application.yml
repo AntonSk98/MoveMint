@@ -17,6 +17,16 @@ authentication:
       validity: 2d
       roles: ${authorization.scopes.token-refresh-authorities}
 
+activities:
+  metadata:
+    - type: workout
+      title: bla-bla
+      description: abc
+    - type: water_intake
+      title: bla-bla
+      description: abc
+
+
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/MoveMint
