@@ -34,7 +34,7 @@ public class StretchingActivityService implements IActivityService {
     @Override
     public List<ActivityDto> findActivities() {
         // todo ensure authenticated
-        User user = userService.requireUser("", Function.identity());
+        User user = userService.requireUser(Function.identity());
         return null;
     }
 

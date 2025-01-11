@@ -1,9 +1,12 @@
 package ansk98.de.movemintserver.auth;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Encapsulated utility methods to obtain information about the authenticated user.
@@ -17,8 +20,11 @@ public class AuthenticationUtils {
      *
      * @return user identity
      */
-    public static String currentUserIdentity() {
-        return SecurityContextHolder.getContext().getAuthentication().getName();
+    public static String requireUserIdentity() {
+        return Optional.ofNullable(SecurityContextHolder.getContext())
+                .map(SecurityContext::getAuthentication)
+                .map(Principal::getName)
+                .orElseThrow();
     }
 
     /**

@@ -1,5 +1,6 @@
 package ansk98.de.movemintserver.user;
 
+import ansk98.de.movemintserver.auth.AuthenticationUtils;
 import ansk98.de.movemintserver.auth.RegisterUserCommand;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -29,9 +30,9 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public <MappedUser> MappedUser requireUser(String identity, Function<User, MappedUser> mapper) {
+    public <MappedUser> MappedUser requireUser(Function<User, MappedUser> mapper) {
         return mapper.apply(userRepository
-                .findByIdentity(identity)
+                .findByIdentity(AuthenticationUtils.requireUserIdentity())
                 .orElseThrow(() -> new UserNotFoundException("No user exists with identity: " + identity))
         );
     }
@@ -62,6 +63,7 @@ public class UserService implements IUserService {
     @Override
     @Transactional
     public UserDto updateUser(UpdateUserCommand command) {
+        // todo ensure can update user
         User user = userRepository
                 .findByIdentity(command.identity())
                 .orElseThrow(() -> new UserNotFoundException("User with identity " + command.identity() + " not found"));
@@ -73,6 +75,7 @@ public class UserService implements IUserService {
     @Override
     @Transactional
     public void resetPassword(ResetPasswordCommand command) {
+        // todo ensure can reset password
         User user = userRepository.findByIdentity(command.identity())
                 .orElseThrow(() -> new UserNotFoundException("User with identity " + command.identity() + " not found"));
 

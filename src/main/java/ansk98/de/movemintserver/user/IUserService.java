@@ -15,12 +15,11 @@ public interface IUserService extends UserDetailsService {
     /**
      * Finds a user by identity and maps to the passed mapper.
      *
-     * @param identity     identity
      * @param mapper       mapper
      * @param <MappedUser> mapper
      * @return mapped user
      */
-    <MappedUser> MappedUser requireUser(String identity, Function<User, MappedUser> mapper);
+    <MappedUser> MappedUser requireUser(Function<User, MappedUser> mapper);
 
     /**
      * Finds a user by identity
