@@ -3,6 +3,8 @@ package ansk98.de.movemintserver.user;
 import ansk98.de.movemintserver.auth.RegisterUserCommand;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
+import java.util.function.Function;
+
 /**
  * Service to manage users.
  *
@@ -11,12 +13,22 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 public interface IUserService extends UserDetailsService {
 
     /**
-     * Finds a user by username
+     * Finds a user by identity and maps to the passed mapper.
      *
-     * @param username username
+     * @param identity     identity
+     * @param mapper       mapper
+     * @param <MappedUser> mapper
+     * @return mapped user
+     */
+    <MappedUser> MappedUser requireUser(String identity, Function<User, MappedUser> mapper);
+
+    /**
+     * Finds a user by identity
+     *
+     * @param identity identity
      * @return {@link UserDto}
      */
-    UserDto findUserBy(String username);
+    UserDto findUserBy(String identity);
 
     /**
      * Creates a user.

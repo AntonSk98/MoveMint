@@ -23,9 +23,9 @@ public class UserController {
         return userService.updateUser(command);
     }
 
-    @GetMapping("/find/{username}")
-    public UserDto findUser(@PathVariable String username) {
-        return userService.findUserBy(username);
+    @GetMapping("/find/{identity}")
+    public UserDto findUser(@PathVariable String identity) {
+        return userService.findUserBy(identity);
     }
 
     @PostMapping("/reset-password")

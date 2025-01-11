@@ -8,9 +8,9 @@ import java.time.LocalDate;
 /**
  * Command to update user details.
  *
- * @param username
+ * @param identity
  * @param dateOfBirth
  * @author Anton Skripin (anton.tech98@gmail.com)
  */
-public record UpdateUserCommand(@Email String username, @Past LocalDate dateOfBirth) {
+public record UpdateUserCommand(@Email String identity, @Past LocalDate dateOfBirth) {
 }

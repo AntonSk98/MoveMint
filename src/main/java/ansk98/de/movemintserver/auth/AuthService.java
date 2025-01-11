@@ -36,7 +36,7 @@ public class AuthService implements IAuthService {
     public AuthenticationDto login(AuthenticateUserCommand authenticateUserCommand) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        authenticateUserCommand.username(),
+                        authenticateUserCommand.identity(),
                         authenticateUserCommand.password()
                 )
         );
@@ -52,13 +52,13 @@ public class AuthService implements IAuthService {
     public AuthenticationDto issueNewTokens(@Valid RefreshTokenCommand refreshTokenCommand) {
         UserClaims userClaims = jwtManager.refreshTokenClaims(refreshTokenCommand.refreshToken());
 
-        UserDto user = userService.findUserBy(userClaims.username());
+        UserDto user = userService.findUserBy(userClaims.identity());
 
         Objects.requireNonNull(user);
 
         return new AuthenticationDto(
-                jwtManager.generateAccessToken(user.username()),
-                jwtManager.generateRefreshToken(user.username())
+                jwtManager.generateAccessToken(user.identity()),
+                jwtManager.generateRefreshToken(user.identity())
         );
     }
 

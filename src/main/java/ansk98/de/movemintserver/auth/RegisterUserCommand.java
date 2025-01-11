@@ -10,9 +10,9 @@ import java.time.LocalDate;
  * Command to register a new user.
  *
  * @param password    plain-text password
- * @param username    username
+ * @param identity    identity
  * @param dateOfBirth date of birth
  * @author Anton Skripin (anton.tech98@gmail.com)
  */
-public record RegisterUserCommand(String password, @Email String username, @Past @NotNull LocalDate dateOfBirth) {
+public record RegisterUserCommand(String password, @Email String identity, @Past @NotNull LocalDate dateOfBirth) {
 }

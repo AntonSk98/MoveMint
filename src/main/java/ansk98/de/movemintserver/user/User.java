@@ -25,9 +25,9 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @Email(message = "A valid username must be provided")
+    @Email(message = "A valid identity must be provided")
     @Column(nullable = false, unique = true)
-    private String username;
+    private String identity;
 
     @Column(nullable = false)
     @Past(message = "Date of birth must be in the past")
@@ -40,15 +40,15 @@ public class User {
      * Creates a new user
      *
      * @param password    encoded password
-     * @param username    username
+     * @param identity    identity
      * @param dateOfBirth date of birth
      * @return user
      */
-    public static User createUser(String password, String username, LocalDate dateOfBirth) {
+    public static User createUser(String password, String identity, LocalDate dateOfBirth) {
         User user = new User();
         user.id = UUID.randomUUID();
         user.password = password;
-        user.username = username;
+        user.identity = identity;
         user.dateOfBirth = dateOfBirth;
         return user;
     }
@@ -56,11 +56,11 @@ public class User {
     /**
      * Updates user details
      *
-     * @param username    username
+     * @param identity    identity
      * @param dateOfBirth date of birth
      */
-    public void updateUser(String username, LocalDate dateOfBirth) {
-        this.username = username;
+    public void updateUser(String identity, LocalDate dateOfBirth) {
+        this.identity = identity;
         this.dateOfBirth = dateOfBirth;
     }
 
@@ -81,8 +81,8 @@ public class User {
         return password;
     }
 
-    public String getUsername() {
-        return username;
+    public String getIdentity() {
+        return identity;
     }
 
     public LocalDate getDateOfBirth() {

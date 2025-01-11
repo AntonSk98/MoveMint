@@ -13,18 +13,18 @@ import java.util.UUID;
 public interface IUserRepository extends JpaRepository<User, UUID> {
 
     /**
-     * Finds a user by its username.
+     * Finds a user by its identity.
      *
-     * @param username username
+     * @param identity identity
      * @return user
      */
-    Optional<User> findByUsername(String username);
+    Optional<User> findByIdentity(String identity);
 
     /**
-     * Checks whether there already exists a user by the given username.
+     * Checks whether there already exists a user by the given identity.
      *
-     * @param username username
+     * @param identity identity
      * @return true if the user already exists
      */
-    boolean existsByUsername(String username);
+    boolean existsByIdentity(String identity);
 }

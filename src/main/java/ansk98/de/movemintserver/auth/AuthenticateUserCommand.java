@@ -6,9 +6,9 @@ import jakarta.validation.constraints.NotNull;
 /**
  * Command to authenticate a user.
  *
- * @param username username
+ * @param identity identity
  * @param password password
  * @author Anton Skripin (anton.tech98@gmail.com)
  */
-public record AuthenticateUserCommand(@NotNull @Email String username, @NotNull String password) {
+public record AuthenticateUserCommand(@NotNull @Email String identity, @NotNull String password) {
 }

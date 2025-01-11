@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.Optional;
+import java.util.function.Function;
 
 /**
  * Implementation of {@link IUserService}.
@@ -28,22 +29,30 @@ public class UserService implements IUserService {
     }
 
     @Override
+    public <MappedUser> MappedUser requireUser(String identity, Function<User, MappedUser> mapper) {
+        return mapper.apply(userRepository
+                .findByIdentity(identity)
+                .orElseThrow(() -> new UserNotFoundException("No user exists with identity: " + identity))
+        );
+    }
+
+    @Override
     @Transactional(readOnly = true)
-    public UserDto findUserBy(String username) {
+    public UserDto findUserBy(String identity) {
         return userRepository
-                .findByUsername(username)
+                .findByIdentity(identity)
                 .map(UserDto::from)
-                .orElseThrow(() -> new UserNotFoundException("User with username " + username + " not found"));
+                .orElseThrow(() -> new UserNotFoundException("User with identity " + identity + " not found"));
     }
 
     @Override
     @Transactional
     public UserDto createUser(RegisterUserCommand command) {
-        if (userRepository.existsByUsername(command.username())) {
-            throw new UsernameTakenException("User with username " + command.username() + " already exists");
+        if (userRepository.existsByIdentity(command.identity())) {
+            throw new IdentityTakenException("User with identity " + command.identity() + " already exists");
         }
 
-        User user = User.createUser(passwordEncoder.encode(command.password()), command.username(), command.dateOfBirth());
+        User user = User.createUser(passwordEncoder.encode(command.password()), command.identity(), command.dateOfBirth());
 
         return Optional.of(userRepository.save(user))
                 .map(UserDto::from)
@@ -54,9 +63,9 @@ public class UserService implements IUserService {
     @Transactional
     public UserDto updateUser(UpdateUserCommand command) {
         User user = userRepository
-                .findByUsername(command.username())
-                .orElseThrow(() -> new UserNotFoundException("User with username " + command.username() + " not found"));
-        user.updateUser(command.username(), command.dateOfBirth());
+                .findByIdentity(command.identity())
+                .orElseThrow(() -> new UserNotFoundException("User with identity " + command.identity() + " not found"));
+        user.updateUser(command.identity(), command.dateOfBirth());
 
         return UserDto.from(user);
     }
@@ -64,16 +73,16 @@ public class UserService implements IUserService {
     @Override
     @Transactional
     public void resetPassword(ResetPasswordCommand command) {
-        User user = userRepository.findByUsername(command.username())
-                .orElseThrow(() -> new UserNotFoundException("User with username " + command.username() + " not found"));
+        User user = userRepository.findByIdentity(command.identity())
+                .orElseThrow(() -> new UserNotFoundException("User with identity " + command.identity() + " not found"));
 
         user.resetPassword(command.password());
     }
 
     @Override
     @Transactional(readOnly = true)
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException("User not found with username " + username));
-        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), Collections.emptyList());
+    public UserDetails loadUserByUsername(String identity) throws UsernameNotFoundException {
+        User user = userRepository.findByIdentity(identity).orElseThrow(() -> new UserNotFoundException("User not found with identity " + identity));
+        return new org.springframework.security.core.userdetails.User(user.getIdentity(), user.getPassword(), Collections.emptyList());
     }
 }
