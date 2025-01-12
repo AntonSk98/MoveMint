@@ -1,5 +1,4 @@
 spring.application.name: MoveMint-server
-
 authorization:
   scopes:
     public-authorities: ROLE_USER
@@ -35,3 +34,5 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+  mvc:
+    log-resolved-exception: true
