@@ -18,7 +18,7 @@ public class ActivityDto {
     private ActivityType activityType;
 
     @JsonUnwrapped
-    private ActivityDetailsDto activityDetails;
+    private ActivityDetail activityDetails;
 
     public UUID getId() {
         return id;
@@ -40,7 +40,7 @@ public class ActivityDto {
         return activityType;
     }
 
-    public ActivityDetailsDto getActivityDetails() {
+    public ActivityDetail getActivityDetails() {
         return activityDetails;
     }
 
@@ -69,7 +69,7 @@ public class ActivityDto {
         return this;
     }
 
-    public ActivityDto setActivityDetails(ActivityDetailsDto activityDetails) {
+    public ActivityDto setActivityDetails(ActivityDetail activityDetails) {
         this.activityDetails = activityDetails;
         return this;
     }

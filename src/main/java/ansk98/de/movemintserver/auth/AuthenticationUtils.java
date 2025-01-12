@@ -1,5 +1,7 @@
 package ansk98.de.movemintserver.auth;
 
+import ansk98.de.movemintserver.user.UnauthorizedAccessException;
+import jakarta.annotation.Nonnull;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -38,5 +40,18 @@ public class AuthenticationUtils {
                 .getAuthorities()
                 .stream()
                 .map(GrantedAuthority::getAuthority).toList();
+    }
+
+    /**
+     * Checks that the authenticated user is allowed to perform an action on behalf of the user of the passed identity.
+     *
+     * @param identity user identity
+     */
+    public static void ensureCanActOnBehalfOf(@Nonnull String identity) {
+        if (identity.equals(requireUserIdentity())) {
+            return;
+        }
+
+        throw new UnauthorizedAccessException();
     }
 }

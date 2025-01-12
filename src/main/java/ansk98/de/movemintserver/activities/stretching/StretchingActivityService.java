@@ -1,9 +1,6 @@
 package ansk98.de.movemintserver.activities.stretching;
 
-import ansk98.de.movemintserver.activities.common.AcceptActivityCommand;
-import ansk98.de.movemintserver.activities.common.ActivityDto;
-import ansk98.de.movemintserver.activities.common.DeclineActivityCommand;
-import ansk98.de.movemintserver.activities.common.IActivityService;
+import ansk98.de.movemintserver.activities.common.*;
 import ansk98.de.movemintserver.user.IUserService;
 import ansk98.de.movemintserver.user.User;
 import org.springframework.stereotype.Service;
@@ -12,7 +9,6 @@ import java.util.List;
 import java.util.function.Function;
 
 import static ansk98.de.movemintserver.activities.common.ActivityType.STRETCHING_ACTIVITY;
-import static ansk98.de.movemintserver.activities.common.ValidationUtils.validateActivityType;
 
 /**
  * Implementation of {@link IActivityService} for {@link StretchingActivity}.
@@ -20,35 +16,49 @@ import static ansk98.de.movemintserver.activities.common.ValidationUtils.validat
  * @author Anton Skripin (anton.tech98@gmail.com)
  */
 @Service
-public class StretchingActivityService implements IActivityService {
+public class StretchingActivityService implements ISupportedActivityService {
 
     private final IStretchingActivityRepository stretchingActivityRepository;
     private final IUserService userService;
+    private final ActivitiesMetadata activitiesMetadata;
 
     public StretchingActivityService(IStretchingActivityRepository stretchingActivityRepository,
-                                     IUserService userService) {
+                                     IUserService userService,
+                                     ActivitiesMetadata activitiesMetadata) {
         this.stretchingActivityRepository = stretchingActivityRepository;
         this.userService = userService;
+        this.activitiesMetadata = activitiesMetadata;
     }
 
     @Override
     public List<ActivityDto> findActivities() {
-        // todo ensure authenticated
         User user = userService.requireUser(Function.identity());
-        return null;
+        ActivitiesMetadata.Metadata metadata = activitiesMetadata.findByType(STRETCHING_ACTIVITY);
+        Function<StretchingActivity, ActivityDto> mapper = activity -> new ActivityDto()
+                .setId(activity.getId())
+                .setTitle(metadata.title())
+                .setDescription(metadata.description())
+                .setActivityType(STRETCHING_ACTIVITY)
+                .setCreatedAt(activity.getCreatedAt())
+                .setActivityDetails(new ActivityDetail().addDetail("exercises", activity.getExercises()));
+
+        return stretchingActivityRepository
+                .findAllByUser(user)
+                .stream()
+                .map(mapper)
+                .toList();
     }
 
     @Override
     public void acceptActivity(AcceptActivityCommand acceptCommand) {
-        // todo ensure authenticated
-        validateActivityType(STRETCHING_ACTIVITY, acceptCommand.activityType());
-        // todo
     }
 
     @Override
     public void declineActivity(DeclineActivityCommand declineCommand) {
-        // todo ensure authenticated
-        validateActivityType(STRETCHING_ACTIVITY, declineCommand.activityType());
-        // todo
+    }
+
+    @Override
+    public boolean isSupported(ActivityType activityType) {
+        return STRETCHING_ACTIVITY.equals(activityType);
     }
 }

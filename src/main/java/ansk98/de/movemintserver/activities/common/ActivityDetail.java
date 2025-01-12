@@ -9,12 +9,12 @@ import java.util.Map;
  *
  * @author Anton Skripin (anton.tech98@gmail.com)
  */
-public class ActivityDetailsDto {
+public class ActivityDetail {
 
 
     private final Map<String, Object> activityDetails = new HashMap<>();
 
-    public ActivityDetailsDto addDetail(String key, Object value) {
+    public ActivityDetail addDetail(String key, Object value) {
         activityDetails.put(key, value);
         return this;
     }
