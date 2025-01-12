@@ -67,9 +67,13 @@ public class User {
     /**
      * Resets the password
      *
+     * @param oldPassword old password
      * @param newPassword encoded password
      */
-    public void resetPassword(String newPassword) {
+    public void resetPassword(String oldPassword, String newPassword) {
+        if (!this.password.equals(oldPassword)) {
+            throw new WrongCredentialsException();
+        }
         this.password = newPassword;
     }
 

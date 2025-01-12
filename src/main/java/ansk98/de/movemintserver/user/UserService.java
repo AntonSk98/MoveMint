@@ -12,6 +12,8 @@ import java.util.Collections;
 import java.util.Optional;
 import java.util.function.Function;
 
+import static ansk98.de.movemintserver.auth.AuthenticationUtils.ensureCanActOnBehalfOf;
+
 /**
  * Implementation of {@link IUserService}.
  *
@@ -33,7 +35,7 @@ public class UserService implements IUserService {
     public <MappedUser> MappedUser requireUser(Function<User, MappedUser> mapper) {
         return mapper.apply(userRepository
                 .findByIdentity(AuthenticationUtils.requireUserIdentity())
-                .orElseThrow(() -> new UserNotFoundException("No user exists with identity: " + identity))
+                .orElseThrow(() -> new UserNotFoundException("No user is authenticated"))
         );
     }
 
@@ -63,10 +65,12 @@ public class UserService implements IUserService {
     @Override
     @Transactional
     public UserDto updateUser(UpdateUserCommand command) {
-        // todo ensure can update user
         User user = userRepository
                 .findByIdentity(command.identity())
                 .orElseThrow(() -> new UserNotFoundException("User with identity " + command.identity() + " not found"));
+
+        ensureCanActOnBehalfOf(user.getIdentity());
+
         user.updateUser(command.identity(), command.dateOfBirth());
 
         return UserDto.from(user);
@@ -75,11 +79,12 @@ public class UserService implements IUserService {
     @Override
     @Transactional
     public void resetPassword(ResetPasswordCommand command) {
-        // todo ensure can reset password
         User user = userRepository.findByIdentity(command.identity())
                 .orElseThrow(() -> new UserNotFoundException("User with identity " + command.identity() + " not found"));
 
-        user.resetPassword(command.password());
+        ensureCanActOnBehalfOf(user.getIdentity());
+
+        user.resetPassword(passwordEncoder.encode(command.oldPassword()), passwordEncoder.encode(command.password()));
     }
 
     @Override

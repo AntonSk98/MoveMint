@@ -3,6 +3,8 @@ package ansk98.de.movemintserver.user;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
+import static ansk98.de.movemintserver.auth.AuthenticationUtils.ensureCanActOnBehalfOf;
+
 /**
  * Controller to manage the state of a user.
  *
@@ -25,6 +27,7 @@ public class UserController {
 
     @GetMapping("/find/{identity}")
     public UserDto findUser(@PathVariable String identity) {
+        ensureCanActOnBehalfOf(identity);
         return userService.findUserBy(identity);
     }
 
