@@ -2,6 +2,7 @@ package ansk98.de.movemintserver.activities.stretching;
 
 import ansk98.de.movemintserver.activities.common.AbstractActivity;
 import ansk98.de.movemintserver.activities.common.ActivityType;
+import ansk98.de.movemintserver.user.User;
 import jakarta.persistence.*;
 
 import java.util.Collections;
@@ -27,12 +28,13 @@ public class StretchingActivity extends AbstractActivity {
     protected StretchingActivity() {
     }
 
-    private StretchingActivity(List<Exercise> exercise) {
+    private StretchingActivity(User user, List<Exercise> exercise) {
+        super(user);
         this.exercises = exercise;
     }
 
-    public static StretchingActivity create(List<Exercise> exercises) {
-        return new StretchingActivity(exercises);
+    public static StretchingActivity create(User user, List<Exercise> exercises) {
+        return new StretchingActivity(user, exercises);
     }
 
     public List<Exercise> getExercises() {
