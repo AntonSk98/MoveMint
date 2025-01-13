@@ -9,5 +9,5 @@ import java.util.UUID;
  * @param activityType activity type
  * @author Anton Skripin (anton.tech98@gmail.com)
  */
-public record DeclineActivityCommand(UUID id, ActivityType activityType) {
+public record RejectActivityCommand(UUID id, ActivityType activityType) {
 }

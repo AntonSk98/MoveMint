@@ -26,7 +26,7 @@ public interface IActivityService {
     /**
      * Declines an activity
      *
-     * @param declineCommand see {@link DeclineActivityCommand}
+     * @param declineCommand see {@link RejectActivityCommand}
      */
-    void declineActivity(DeclineActivityCommand declineCommand);
+    void rejectActivity(RejectActivityCommand declineCommand);
 }

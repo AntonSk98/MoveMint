@@ -1,5 +1,7 @@
 package ansk98.de.movemintserver.activities.common;
 
+import ansk98.de.movemintserver.eventing.activity.ActivityAcceptedEvent;
+import ansk98.de.movemintserver.eventing.activity.ActivityRejectedEvent;
 import ansk98.de.movemintserver.user.User;
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
@@ -38,6 +40,14 @@ public abstract class AbstractActivity implements IActivity {
      */
     protected AbstractActivity() {
 
+    }
+
+    public ActivityAcceptedEvent accept() {
+        return ActivityAcceptedEvent.of(this);
+    }
+
+    public ActivityRejectedEvent reject() {
+        return ActivityRejectedEvent.of(this);
     }
 
     @Override

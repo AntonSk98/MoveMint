@@ -22,7 +22,7 @@ public class ActivityService implements IActivityService {
     }
 
     @Override
-    public void declineActivity(DeclineActivityCommand declineCommand) {
+    public void rejectActivity(RejectActivityCommand declineCommand) {
         validateActivityType(declineCommand.activityType());
     }
 

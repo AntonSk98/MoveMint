@@ -1,4 +1,4 @@
-package ansk98.de.movemintserver.activities.stretching;
+package ansk98.de.movemintserver.activities.vision;
 
 import ansk98.de.movemintserver.activities.common.*;
 import ansk98.de.movemintserver.eventing.IEventPublisher;
@@ -7,38 +7,36 @@ import org.springframework.stereotype.Service;
 
 import java.util.function.Function;
 
-import static ansk98.de.movemintserver.activities.common.ActivityType.STRETCHING_ACTIVITY;
+import static ansk98.de.movemintserver.activities.common.ActivityType.VISION_REST_ACTIVITY;
 
 /**
- * Implementation of {@link IActivityService} for {@link StretchingActivity}.
+ * Implementation of {@link IActivityService} for {@link VisionRestActivity}.
  *
  * @author Anton Skripin (anton.tech98@gmail.com)
  */
 @Service
-public class StretchingActivityService extends AbstractActivityService<StretchingActivity> {
+public class VisionRestActivityService extends AbstractActivityService<VisionRestActivity> {
 
 
-    public StretchingActivityService(IActivityRepository<StretchingActivity> stretchingActivityRepository,
+    public VisionRestActivityService(IVisionRestActivityRepository visionRestActivityRepository,
                                      IUserService userService,
                                      ActivitiesMetadata activitiesMetadata,
                                      IEventPublisher eventPublisher) {
-        super(stretchingActivityRepository, userService, activitiesMetadata, eventPublisher);
+        super(visionRestActivityRepository, userService, activitiesMetadata, eventPublisher);
     }
 
-
     @Override
-    public Function<StretchingActivity, ActivityDto> mapper() {
+    public Function<VisionRestActivity, ActivityDto> mapper() {
         return activity -> new ActivityDto()
                 .setId(activity.getId())
                 .setTitle(activitiesMetadata.findByType(activity.getActivityType()).title())
                 .setDescription(activitiesMetadata.findByType(activity.getActivityType()).description())
-                .setActivityType(STRETCHING_ACTIVITY)
-                .setCreatedAt(activity.getCreatedAt())
-                .setActivityDetails(new ActivityDetail().addDetail("exercises", activity.getExercises()));
+                .setActivityType(VISION_REST_ACTIVITY)
+                .setCreatedAt(activity.getCreatedAt());
     }
 
     @Override
     public ActivityType getActivityType() {
-        return STRETCHING_ACTIVITY;
+        return VISION_REST_ACTIVITY;
     }
 }
