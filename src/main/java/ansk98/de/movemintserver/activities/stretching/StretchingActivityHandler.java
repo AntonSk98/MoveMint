@@ -15,19 +15,24 @@ import static ansk98.de.movemintserver.activities.common.ActivityType.STRETCHING
  * @author Anton Skripin (anton.tech98@gmail.com)
  */
 @Service
-public class StretchingActivityService extends AbstractActivityService<StretchingActivity> {
+public class StretchingActivityHandler extends AbstractActivityHandler<StretchingActivity> {
 
 
-    public StretchingActivityService(IActivityRepository<StretchingActivity> stretchingActivityRepository,
+    public StretchingActivityHandler(IActivityRepository<StretchingActivity> stretchingActivityRepository,
                                      IUserService userService,
                                      ActivitiesMetadata activitiesMetadata,
                                      IEventPublisher eventPublisher) {
         super(stretchingActivityRepository, userService, activitiesMetadata, eventPublisher);
     }
 
+    @Override
+    public StretchingActivity mapToActivity(CreateActivityCommand activityCommand) {
+        return activityCommand.activity().map(StretchingActivity.class);
+    }
+
 
     @Override
-    public Function<StretchingActivity, ActivityDto> mapper() {
+    public Function<StretchingActivity, ActivityDto> mapToActivityDto() {
         return activity -> new ActivityDto()
                 .setId(activity.getId())
                 .setTitle(activitiesMetadata.findByType(activity.getActivityType()).title())

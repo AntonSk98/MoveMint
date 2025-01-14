@@ -33,7 +33,7 @@ public class StretchingActivity extends AbstractActivity {
         this.exercises = exercise;
     }
 
-    public static StretchingActivity create(User user, List<Exercise> exercises) {
+    public static StretchingActivity createFor(User user, List<Exercise> exercises) {
         return new StretchingActivity(user, exercises);
     }
 

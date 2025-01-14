@@ -13,9 +13,9 @@ import java.util.function.Function;
  * @author Anton Skripin (anton.tech98@gmail.com)
  */
 @Service
-public class WaterIntakeActivityService extends AbstractActivityService<WaterIntakeActivity> {
+public class WaterIntakeActivityHandler extends AbstractActivityHandler<WaterIntakeActivity> {
 
-    public WaterIntakeActivityService(IActivityRepository<WaterIntakeActivity> activityRepository,
+    public WaterIntakeActivityHandler(IActivityRepository<WaterIntakeActivity> activityRepository,
                                       IUserService userService,
                                       ActivitiesMetadata activitiesMetadata,
                                       IEventPublisher eventPublisher) {
@@ -23,7 +23,7 @@ public class WaterIntakeActivityService extends AbstractActivityService<WaterInt
     }
 
     @Override
-    public Function<WaterIntakeActivity, ActivityDto> mapper() {
+    public Function<WaterIntakeActivity, ActivityDto> mapToActivityDto() {
         return activity -> new ActivityDto()
                 .setId(activity.getId())
                 .setTitle(activitiesMetadata.findByType(getActivityType()).title())
@@ -35,5 +35,10 @@ public class WaterIntakeActivityService extends AbstractActivityService<WaterInt
     @Override
     public ActivityType getActivityType() {
         return ActivityType.WATER_INTAKE_ACTIVITY;
+    }
+
+    @Override
+    public WaterIntakeActivity mapToActivity(CreateActivityCommand activityCommand) {
+        return activityCommand.activity().map(WaterIntakeActivity.class);
     }
 }

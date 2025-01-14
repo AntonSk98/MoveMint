@@ -15,10 +15,10 @@ import static ansk98.de.movemintserver.activities.common.ActivityType.VISION_RES
  * @author Anton Skripin (anton.tech98@gmail.com)
  */
 @Service
-public class VisionRestActivityService extends AbstractActivityService<VisionRestActivity> {
+public class VisionRestActivityHandler extends AbstractActivityHandler<VisionRestActivity> {
 
 
-    public VisionRestActivityService(IVisionRestActivityRepository visionRestActivityRepository,
+    public VisionRestActivityHandler(IVisionRestActivityRepository visionRestActivityRepository,
                                      IUserService userService,
                                      ActivitiesMetadata activitiesMetadata,
                                      IEventPublisher eventPublisher) {
@@ -26,7 +26,7 @@ public class VisionRestActivityService extends AbstractActivityService<VisionRes
     }
 
     @Override
-    public Function<VisionRestActivity, ActivityDto> mapper() {
+    public Function<VisionRestActivity, ActivityDto> mapToActivityDto() {
         return activity -> new ActivityDto()
                 .setId(activity.getId())
                 .setTitle(activitiesMetadata.findByType(activity.getActivityType()).title())
@@ -38,5 +38,10 @@ public class VisionRestActivityService extends AbstractActivityService<VisionRes
     @Override
     public ActivityType getActivityType() {
         return VISION_REST_ACTIVITY;
+    }
+
+    @Override
+    public VisionRestActivity mapToActivity(CreateActivityCommand activityCommand) {
+        return activityCommand.activity().map(VisionRestActivity.class);
     }
 }

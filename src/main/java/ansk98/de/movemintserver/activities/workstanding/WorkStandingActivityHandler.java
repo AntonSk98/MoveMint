@@ -16,9 +16,9 @@ import static ansk98.de.movemintserver.activities.common.ActivityType.WORK_STAND
  * @author Anton Skripin (anton.tech98@gmail.com)
  */
 @Service
-public class WorkStandingActivityService extends AbstractActivityService<WorkStandingActivity> {
+public class WorkStandingActivityHandler extends AbstractActivityHandler<WorkStandingActivity> {
 
-    public WorkStandingActivityService(IActivityRepository<WorkStandingActivity> activityRepository,
+    public WorkStandingActivityHandler(IActivityRepository<WorkStandingActivity> activityRepository,
                                        IUserService userService,
                                        ActivitiesMetadata activitiesMetadata,
                                        IEventPublisher eventPublisher) {
@@ -26,7 +26,7 @@ public class WorkStandingActivityService extends AbstractActivityService<WorkSta
     }
 
     @Override
-    public Function<WorkStandingActivity, ActivityDto> mapper() {
+    public Function<WorkStandingActivity, ActivityDto> mapToActivityDto() {
         return activity -> new ActivityDto()
                 .setId(activity.getId())
                 .setTitle(activitiesMetadata.findByType(getActivityType()).title())
@@ -38,5 +38,10 @@ public class WorkStandingActivityService extends AbstractActivityService<WorkSta
     @Override
     public ActivityType getActivityType() {
         return WORK_STANDING_ACTIVITY;
+    }
+
+    @Override
+    public WorkStandingActivity mapToActivity(CreateActivityCommand activityCommand) {
+        return activityCommand.activity().map(WorkStandingActivity.class);
     }
 }

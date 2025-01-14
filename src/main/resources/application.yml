@@ -18,12 +18,18 @@ authentication:
 
 activities:
   metadata:
-    - type: workout
-      title: bla-bla
-      description: abc
-    - type: water_intake
-      title: bla-bla
-      description: abc
+    - type: STRETCHING_ACTIVITY
+      title: stretching
+      description: stretching_abc
+    - type: WATER_INTAKE_ACTIVITY
+      title: stretching
+      description: stretching_abc
+    - type: WORK_STANDING_ACTIVITY
+      title: work_standing
+      description: work_standing_abc
+    - type: VISION_REST_ACTIVITY
+      title: vision
+      description: vision_abc
 
 
 spring:

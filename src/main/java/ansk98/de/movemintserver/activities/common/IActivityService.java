@@ -16,6 +16,8 @@ public interface IActivityService {
      */
     List<ActivityDto> findActivities();
 
+    void createActivity(CreateActivityCommand activityCommand);
+
     /**
      * Accepts an activity.
      *

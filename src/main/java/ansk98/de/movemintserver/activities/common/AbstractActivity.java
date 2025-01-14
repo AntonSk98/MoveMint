@@ -4,7 +4,10 @@ import ansk98.de.movemintserver.eventing.activity.ActivityAcceptedEvent;
 import ansk98.de.movemintserver.eventing.activity.ActivityRejectedEvent;
 import ansk98.de.movemintserver.user.User;
 import jakarta.annotation.Nonnull;
-import jakarta.persistence.*;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.MappedSuperclass;
 import org.hibernate.annotations.OnDelete;
 
 import java.time.ZonedDateTime;
@@ -24,7 +27,7 @@ public abstract class AbstractActivity implements IActivity {
     private UUID id;
     private ZonedDateTime createdAt;
 
-    @ManyToOne(fetch = LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     @OnDelete(action = CASCADE)
     private User user;

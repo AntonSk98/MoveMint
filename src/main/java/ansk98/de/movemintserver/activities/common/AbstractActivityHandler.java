@@ -14,14 +14,14 @@ import static java.util.function.UnaryOperator.identity;
  *
  * @author Anton Skripin (anton.tech98@gmail.com)
  */
-public abstract class AbstractActivityService<Activity extends AbstractActivity> implements ISupportedActivityService {
+public abstract class AbstractActivityHandler<Activity extends IActivity> implements IActivityHandler {
 
     protected final IActivityRepository<Activity> activityRepository;
     protected final IUserService userService;
     protected final ActivitiesMetadata activitiesMetadata;
     protected final IEventPublisher eventPublisher;
 
-    public AbstractActivityService(IActivityRepository<Activity> activityRepository,
+    public AbstractActivityHandler(IActivityRepository<Activity> activityRepository,
                                    IUserService userService,
                                    ActivitiesMetadata activitiesMetadata,
                                    IEventPublisher eventPublisher) {
@@ -32,10 +32,18 @@ public abstract class AbstractActivityService<Activity extends AbstractActivity>
     }
 
     @Override
+    public void createActivity(CreateActivityCommand createActivityCommand) {
+        var activity = mapToActivity(createActivityCommand);
+
+        activityRepository.save(activity);
+
+    }
+
+    @Override
     public List<ActivityDto> findActivities() {
         return activityRepository.findAllByUser(userService.requireUser(identity()))
                 .stream()
-                .map(mapper())
+                .map(mapToActivityDto())
                 .toList();
     }
 
@@ -58,7 +66,10 @@ public abstract class AbstractActivityService<Activity extends AbstractActivity>
         return getActivityType().equals(activityType);
     }
 
-    public abstract Function<Activity, ActivityDto> mapper();
+    public abstract Function<Activity, ActivityDto> mapToActivityDto();
 
     public abstract ActivityType getActivityType();
+
+    public abstract Activity mapToActivity(CreateActivityCommand activityCommand);
+
 }
