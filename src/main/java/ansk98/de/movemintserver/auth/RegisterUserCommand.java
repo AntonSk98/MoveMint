@@ -1,18 +1,19 @@
 package ansk98.de.movemintserver.auth;
 
+import ansk98.de.movemintserver.user.UserDetailsParams;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Past;
-
-import java.time.LocalDate;
 
 /**
  * Command to register a new user.
  *
- * @param password    plain-text password
  * @param identity    identity
- * @param dateOfBirth date of birth
+ * @param password    plain-text password
+ * @param userDetails user details
  * @author Anton Skripin (anton.tech98@gmail.com)
  */
-public record RegisterUserCommand(String password, @Email String identity, @Past @NotNull LocalDate dateOfBirth) {
+public record RegisterUserCommand(@Email String identity,
+                                  String password,
+                                  @Valid @NotNull UserDetailsParams userDetails) {
 }

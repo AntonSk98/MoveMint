@@ -2,7 +2,6 @@ package ansk98.de.movemintserver.user;
 
 import ansk98.de.movemintserver.auth.AuthenticationUtils;
 import ansk98.de.movemintserver.auth.RegisterUserCommand;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -55,7 +54,16 @@ public class UserService implements IUserService {
             throw new IdentityTakenException("User with identity " + command.identity() + " already exists");
         }
 
-        User user = User.createUser(passwordEncoder.encode(command.password()), command.identity(), command.dateOfBirth());
+        User user = User.createUser(
+                command.identity(),
+                passwordEncoder.encode(command.password()),
+                new UserDetails.Builder()
+                        .name(command.userDetails().name())
+                        .dateOfBirth(command.userDetails().dateOfBirth())
+                        .gender(command.userDetails().gender())
+                        .height(command.userDetails().height())
+                        .weight(command.userDetails().weight())
+        );
 
         return Optional.of(userRepository.save(user))
                 .map(UserDto::from)
@@ -71,7 +79,12 @@ public class UserService implements IUserService {
 
         ensureCanActOnBehalfOf(user.getIdentity());
 
-        user.updateUser(command.identity(), command.dateOfBirth());
+        user.updateUser(command.identity(), new UserDetails.Builder()
+                .name(command.userDetails().name())
+                .dateOfBirth(command.userDetails().dateOfBirth())
+                .gender(command.userDetails().gender())
+                .height(command.userDetails().height())
+                .weight(command.userDetails().weight()));
 
         return UserDto.from(user);
     }
@@ -89,7 +102,7 @@ public class UserService implements IUserService {
 
     @Override
     @Transactional(readOnly = true)
-    public UserDetails loadUserByUsername(String identity) throws UsernameNotFoundException {
+    public org.springframework.security.core.userdetails.UserDetails loadUserByUsername(String identity) throws UsernameNotFoundException {
         User user = userRepository.findByIdentity(identity).orElseThrow(() -> new UserNotFoundException("User not found with identity " + identity));
         return new org.springframework.security.core.userdetails.User(user.getIdentity(), user.getPassword(), Collections.emptyList());
     }

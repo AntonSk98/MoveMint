@@ -1,13 +1,9 @@
 package ansk98.de.movemintserver.user;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Past;
 
-import java.time.LocalDate;
 import java.util.UUID;
 
 /**
@@ -29,9 +25,9 @@ public class User {
     @Column(nullable = false, unique = true)
     private String identity;
 
-    @Column(nullable = false)
-    @Past(message = "Date of birth must be in the past")
-    private LocalDate dateOfBirth;
+    @Valid
+    @Embedded
+    private UserDetails userDetails;
 
     protected User() {
     }
@@ -41,15 +37,15 @@ public class User {
      *
      * @param password    encoded password
      * @param identity    identity
-     * @param dateOfBirth date of birth
+     * @param userDetails user details
      * @return user
      */
-    public static User createUser(String password, String identity, LocalDate dateOfBirth) {
+    public static User createUser(String identity, String password, UserDetails.Builder userDetails) {
         User user = new User();
         user.id = UUID.randomUUID();
         user.password = password;
         user.identity = identity;
-        user.dateOfBirth = dateOfBirth;
+        user.userDetails = userDetails.build();
         return user;
     }
 
@@ -57,11 +53,11 @@ public class User {
      * Updates user details
      *
      * @param identity    identity
-     * @param dateOfBirth date of birth
+     * @param userDetails user details
      */
-    public void updateUser(String identity, LocalDate dateOfBirth) {
+    public void updateUser(String identity, UserDetails.Builder userDetails) {
         this.identity = identity;
-        this.dateOfBirth = dateOfBirth;
+        this.userDetails = userDetails.build();
     }
 
     /**
@@ -89,7 +85,7 @@ public class User {
         return identity;
     }
 
-    public LocalDate getDateOfBirth() {
-        return dateOfBirth;
+    public UserDetails getUserDetails() {
+        return userDetails;
     }
 }
