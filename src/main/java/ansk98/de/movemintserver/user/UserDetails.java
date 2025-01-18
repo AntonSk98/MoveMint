@@ -10,6 +10,7 @@ import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
 
 /**
  * Encapsulates user details.
@@ -40,6 +41,9 @@ public class UserDetails {
     @Column(nullable = false)
     private Integer weight;
 
+    @Column(nullable = false)
+    private String timezone;
+
     /**
      * No-args
      */
@@ -47,12 +51,18 @@ public class UserDetails {
 
     }
 
-    private UserDetails(String name, LocalDate dateOfBirth, Gender gender, Integer height, Integer weight) {
+    private UserDetails(String name,
+                        LocalDate dateOfBirth,
+                        Gender gender,
+                        Integer height,
+                        Integer weight,
+                        ZoneId timezone) {
         this.name = name;
         this.dateOfBirth = dateOfBirth;
         this.gender = gender;
         this.height = height;
         this.weight = weight;
+        this.timezone = timezone.getId();
     }
 
     public String getName() {
@@ -75,12 +85,17 @@ public class UserDetails {
         return weight;
     }
 
+    public ZoneId getTimezone() {
+        return ZoneId.of(timezone);
+    }
+
     public static class Builder {
         private String name;
         private LocalDate dateOfBirth;
         private Gender gender;
         private Integer height;
         private Integer weight;
+        private ZoneId timezone;
 
         public Builder name(String name) {
             this.name = name;
@@ -108,7 +123,12 @@ public class UserDetails {
         }
 
         public UserDetails build() {
-            return new UserDetails(name, dateOfBirth, gender, height, weight);
+            return new UserDetails(name, dateOfBirth, gender, height, weight, timezone);
+        }
+
+        public Builder timezone(ZoneId timezone) {
+            this.timezone = timezone;
+            return this;
         }
     }
 

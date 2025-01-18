@@ -63,6 +63,7 @@ public class UserService implements IUserService {
                         .gender(command.userDetails().gender())
                         .height(command.userDetails().height())
                         .weight(command.userDetails().weight())
+                        .timezone(command.userDetails().timezone())
         );
 
         return Optional.of(userRepository.save(user))
@@ -84,7 +85,8 @@ public class UserService implements IUserService {
                 .dateOfBirth(command.userDetails().dateOfBirth())
                 .gender(command.userDetails().gender())
                 .height(command.userDetails().height())
-                .weight(command.userDetails().weight()));
+                .weight(command.userDetails().weight())
+                .timezone(command.userDetails().timezone()));
 
         return UserDto.from(user);
     }

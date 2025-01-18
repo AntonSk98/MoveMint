@@ -17,7 +17,8 @@ public record UserDto(String identity, UserDetailsParams userDetailsParams) {
                         user.getUserDetails().getDateOfBirth(),
                         user.getUserDetails().getGender(),
                         user.getUserDetails().getHeight(),
-                        user.getUserDetails().getWeight()
+                        user.getUserDetails().getWeight(),
+                        user.getUserDetails().getTimezone()
                 ));
     }
 }
