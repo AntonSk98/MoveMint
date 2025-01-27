@@ -13,9 +13,9 @@ import java.util.List;
 @RequestMapping("/public/activities")
 public class ActivityController {
 
-    private final IActivityService activityService;
+    private final IActivityServiceDelegate activityService;
 
-    public ActivityController(IActivityService activityService) {
+    public ActivityController(IActivityServiceDelegate activityService) {
         this.activityService = activityService;
     }
 

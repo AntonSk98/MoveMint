@@ -15,7 +15,7 @@ import org.springframework.transaction.event.TransactionalEventListener;
  * @author Anton Skripin (anton.tech98@gmail.com)
  */
 @Component
-public class EventDispatcherService {
+public class EventResolverService {
 
     @Async
     @Retryable(maxAttempts = 5, backoff = @Backoff(delay = 10000, multiplier = 2.0))

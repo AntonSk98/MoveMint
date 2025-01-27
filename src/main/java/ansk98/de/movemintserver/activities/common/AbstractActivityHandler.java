@@ -4,6 +4,7 @@ import ansk98.de.movemintserver.eventing.IEventPublisher;
 import ansk98.de.movemintserver.user.IUserService;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 
 import static java.util.function.UnaryOperator.identity;
@@ -59,6 +60,14 @@ public abstract class AbstractActivityHandler<Activity extends IActivity> implem
         Activity activity = activityRepository.getReferenceById(rejectCommand.id());
         eventPublisher.publishEvent(activity.reject());
         activityRepository.delete(activity);
+    }
+
+    @Override
+    public Optional<ActivityDto> findLatestActivity(String identity) {
+        Optional<Activity> activityOptional = activityRepository.findFirstByUserIdentityOrderByCreatedAtDesc(identity);
+
+        return activityOptional.map(activity -> mapToActivityDto().apply(activity));
+
     }
 
     @Override

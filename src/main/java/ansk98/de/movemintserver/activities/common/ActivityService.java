@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Implementation of {@link IActivityService}.
@@ -11,7 +12,7 @@ import java.util.List;
  * @author Anton Skripin (anton.tech98@gmail.com)
  */
 @Service
-public class ActivityService implements IActivityService {
+public class ActivityService implements IActivityServiceDelegate {
 
     private final List<IActivityHandler> activityServices;
 
@@ -55,5 +56,10 @@ public class ActivityService implements IActivityService {
                 .filter(service -> service.isSupported(activityType))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("No handler supported for: " + activityType));
+    }
+
+    @Override
+    public Optional<ActivityDto> findLatestActivity(String identity, ActivityType activityType) {
+        return findDelegate(activityType).findLatestActivity(identity);
     }
 }

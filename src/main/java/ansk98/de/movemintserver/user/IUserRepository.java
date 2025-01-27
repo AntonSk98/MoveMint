@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 /**
  * Repository to manage {@link User}s.
@@ -27,4 +28,12 @@ public interface IUserRepository extends JpaRepository<User, UUID> {
      * @return true if the user already exists
      */
     boolean existsByIdentity(String identity);
+
+
+    /**
+     * Streams all users with the only necessary details for managing notifications.
+     *
+     * @return stream of all user details
+     */
+    Stream<NotificationUserProjection> streamUserDetails();
 }

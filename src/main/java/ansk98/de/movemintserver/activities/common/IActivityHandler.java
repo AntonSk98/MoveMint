@@ -1,8 +1,9 @@
 package ansk98.de.movemintserver.activities.common;
 
+import java.util.Optional;
+
 /**
- * Extension of {@link IActivityService} that adds functionality
- * to determine if a specific activity type is supported by the implementing service.
+ * Extension of {@link IActivityService} that adds functionality specific to each particular activity handler.
  * <p>
  * This interface is intended to be implemented by services that handle different types of activities,
  * enabling them to declare support for specific {@link ActivityType}s.
@@ -18,4 +19,12 @@ public interface IActivityHandler extends IActivityService {
      * @return true if supported, false otherwise
      */
     boolean isSupported(ActivityType activityType);
+
+    /**
+     * Finds the latest activity for a user with the passed identity.
+     *
+     * @param identity user identity
+     * @return latest activity
+     */
+    Optional<ActivityDto> findLatestActivity(String identity);
 }

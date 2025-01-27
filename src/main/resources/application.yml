@@ -30,6 +30,17 @@ activities:
     - type: VISION_REST_ACTIVITY
       title: vision
       description: vision_abc
+  notification-policy:
+    - type: STRETCHING_ACTIVITY
+      frequency: 90m
+      random-offset-max-seconds: 600
+    - type: WATER_INTAKE_ACTIVITY
+      frequency: 60m
+    - type: WORK_STANDING_ACTIVITY
+      frequency: 70m
+      random-offset-max-seconds: 900
+    - type: VISION_REST_ACTIVITY
+      frequency: 20m
 
 
 spring:
