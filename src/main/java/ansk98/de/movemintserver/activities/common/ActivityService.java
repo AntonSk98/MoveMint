@@ -44,6 +44,11 @@ public class ActivityService implements IActivityServiceDelegate {
         findDelegate(declineCommand.activityType()).rejectActivity(declineCommand);
     }
 
+    @Override
+    public Optional<ActivityDto> findLatestActivity(String identity, ActivityType activityType) {
+        return findDelegate(activityType).findLatestActivity(identity);
+    }
+
     private static void validateActivityType(ActivityType activityType) {
         Arrays.stream(ActivityType.values())
                 .filter(activityType::equals)
@@ -56,10 +61,5 @@ public class ActivityService implements IActivityServiceDelegate {
                 .filter(service -> service.isSupported(activityType))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("No handler supported for: " + activityType));
-    }
-
-    @Override
-    public Optional<ActivityDto> findLatestActivity(String identity, ActivityType activityType) {
-        return findDelegate(activityType).findLatestActivity(identity);
     }
 }

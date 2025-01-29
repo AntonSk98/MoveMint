@@ -4,9 +4,11 @@ import ansk98.de.movemintserver.activities.common.AbstractActivity;
 import ansk98.de.movemintserver.activities.common.ActivityType;
 import ansk98.de.movemintserver.user.User;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import static ansk98.de.movemintserver.activities.common.ActivityType.STRETCHING_ACTIVITY;
 
@@ -28,13 +30,19 @@ public class StretchingActivity extends AbstractActivity {
     protected StretchingActivity() {
     }
 
-    private StretchingActivity(User user, List<Exercise> exercise) {
+    private StretchingActivity(User user) {
         super(user);
-        this.exercises = exercise;
+        this.exercises = Collections.emptyList();
     }
 
-    public static StretchingActivity createFor(User user, List<Exercise> exercises) {
-        return new StretchingActivity(user, exercises);
+    public static StretchingActivity define(User user) {
+        return new StretchingActivity(user);
+    }
+
+    public StretchingActivity withExercises(@NotNull List<Exercise> exercises) {
+        Objects.requireNonNull(exercises);
+        this.exercises = exercises;
+        return this;
     }
 
     public List<Exercise> getExercises() {

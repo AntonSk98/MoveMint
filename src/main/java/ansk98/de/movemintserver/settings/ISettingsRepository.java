@@ -13,4 +13,6 @@ import java.util.UUID;
 public interface ISettingsRepository extends JpaRepository<Settings, UUID> {
 
     Settings findByUser(User User);
+
+    Settings findByUserIdentity(String identity);
 }

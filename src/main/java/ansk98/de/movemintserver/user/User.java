@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 
+import java.time.ZonedDateTime;
 import java.util.UUID;
 
 /**
@@ -29,6 +30,9 @@ public class User {
     @Embedded
     private UserDetails userDetails;
 
+    @Column(nullable = false)
+    private ZonedDateTime registeredAt;
+
     protected User() {
     }
 
@@ -46,6 +50,7 @@ public class User {
         user.password = password;
         user.identity = identity;
         user.userDetails = userDetails.build();
+        user.registeredAt = ZonedDateTime.now();
         return user;
     }
 
@@ -87,5 +92,9 @@ public class User {
 
     public UserDetails getUserDetails() {
         return userDetails;
+    }
+
+    public ZonedDateTime getRegisteredAt() {
+        return registeredAt;
     }
 }

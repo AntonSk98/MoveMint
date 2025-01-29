@@ -20,8 +20,6 @@ public class Exercise {
     private String name;
     @Column(nullable = false)
     private String description;
-    @Column(nullable = false)
-    private String link;
 
     /**
      * No-args.
@@ -30,15 +28,14 @@ public class Exercise {
 
     }
 
-    private Exercise(String name, String description, String link) {
+    private Exercise(String name, String description) {
         this.id = UUID.randomUUID();
         this.name = name;
         this.description = description;
-        this.link = link;
     }
 
-    public static Exercise create(String name, String description, String link) {
-        return new Exercise(name, description, link);
+    public static Exercise create(String name, String description) {
+        return new Exercise(name, description);
     }
 
     public UUID getId() {
@@ -51,9 +48,5 @@ public class Exercise {
 
     public String getDescription() {
         return description;
-    }
-
-    public String getLink() {
-        return link;
     }
 }
