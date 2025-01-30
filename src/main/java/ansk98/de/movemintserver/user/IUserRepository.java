@@ -1,6 +1,7 @@
 package ansk98.de.movemintserver.user;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -35,5 +36,6 @@ public interface IUserRepository extends JpaRepository<User, UUID> {
      *
      * @return stream of all user details
      */
+    @Query("SELECT u.identity AS identity, u.userDetails.timezone AS timezone, u.registeredAt AS registeredAt FROM User u")
     Stream<NotificationUserProjection> streamUserDetails();
 }

@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Email;
 
 import java.time.ZonedDateTime;
 import java.util.UUID;
+import java.util.function.Predicate;
 
 /**
  * User entity.
@@ -68,11 +69,11 @@ public class User {
     /**
      * Resets the password
      *
-     * @param oldPassword old password
-     * @param newPassword encoded password
+     * @param passwordMatchesPredicate predicate
+     * @param newPassword              encoded password
      */
-    public void resetPassword(String oldPassword, String newPassword) {
-        if (!this.password.equals(oldPassword)) {
+    public void resetPassword(Predicate<String> passwordMatchesPredicate, String newPassword) {
+        if (!passwordMatchesPredicate.test(this.password)) {
             throw new WrongCredentialsException();
         }
         this.password = newPassword;

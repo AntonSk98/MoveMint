@@ -1,6 +1,7 @@
 package ansk98.de.movemintserver.user;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
 import org.springframework.web.bind.annotation.*;
 
 import static ansk98.de.movemintserver.auth.AuthenticationUtils.ensureCanActOnBehalfOf;
@@ -26,7 +27,7 @@ public class UserController {
     }
 
     @GetMapping("/find/{identity}")
-    public UserDto findUser(@PathVariable String identity) {
+    public UserDto findUser(@PathVariable @Email String identity) {
         ensureCanActOnBehalfOf(identity);
         return userService.findUserBy(identity);
     }

@@ -2,6 +2,7 @@ package ansk98.de.movemintserver.activities.common;
 
 import ansk98.de.movemintserver.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.NoRepositoryBean;
 
 import java.util.List;
@@ -17,5 +18,7 @@ import java.util.UUID;
 @NoRepositoryBean
 public interface IActivityRepository<Entity extends IActivity> extends JpaRepository<Entity, UUID> {
     List<Entity> findAllByUser(User user);
-    Optional<Entity> findFirstByUserIdentityOrderByCreatedAtDesc(String identity);
+
+    @Query("SELECT activity FROM #{#entityName} activity WHERE activity.user.identity = :identity ORDER BY activity.createdAt DESC")
+    Optional<Entity> findLatestActivityByUserIdentity(String identity);
 }

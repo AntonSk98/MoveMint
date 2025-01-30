@@ -1,0 +1,53 @@
+authorization:
+  scopes:
+    public-authorities: ROLE_USER
+    token-refresh-authorities: ROLE_REFRESH_ACCESS_TOKEN
+
+authentication:
+  jwt:
+    issuer: MoveMint
+    access-token:
+      key: a2FkoLe6PM0wHvvv97HxDvBo4D53zi1YuYuWMCwJIPdytO51ccrfLkm5fQnJZwG/ltfhLLOltq7A/0RZL1KHHA==
+      validity: 5m
+      roles: ${authorization.scopes.public-authorities}
+    refresh-token:
+      key: C3CQfOYM/WZTXlqUn6Ly6q1hV4Ifm6MRvV1LdulFMoEEQxrB3WUsFCKPsHut6PRdCQ4TLQuuHCFPs9gDiR1Lwg==
+      validity: 2d
+      roles: ${authorization.scopes.token-refresh-authorities}
+
+activities:
+  metadata:
+    - type: STRETCHING_ACTIVITY
+      title: stretching
+      description: stretching_abc
+    - type: WATER_INTAKE_ACTIVITY
+      title: stretching
+      description: stretching_abc
+    - type: WORK_STANDING_ACTIVITY
+      title: work_standing
+      description: work_standing_abc
+    - type: VISION_REST_ACTIVITY
+      title: vision
+      description: vision_abc
+
+notification:
+  policy:
+    - type: STRETCHING_ACTIVITY
+      frequency: 90m
+    - type: WATER_INTAKE_ACTIVITY
+      frequency: 60m
+    - type: WORK_STANDING_ACTIVITY
+      frequency: 70m
+    - type: VISION_REST_ACTIVITY
+      frequency: 20m
+
+
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driverClassName: org.h2.Driver
+    username: sa
+    password: password
+  jpa:
+    hibernate:
+      ddl-auto: create-drop

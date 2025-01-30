@@ -94,12 +94,16 @@ public class UserService implements IUserService {
     @Override
     @Transactional
     public void resetPassword(ResetPasswordCommand command) {
+        ensureCanActOnBehalfOf(command.identity());
+
         User user = userRepository.findByIdentity(command.identity())
                 .orElseThrow(() -> new UserNotFoundException("User with identity " + command.identity() + " not found"));
 
-        ensureCanActOnBehalfOf(user.getIdentity());
 
-        user.resetPassword(passwordEncoder.encode(command.oldPassword()), passwordEncoder.encode(command.password()));
+        user.resetPassword(
+                oldPassword -> passwordEncoder.matches(command.oldPassword(), oldPassword),
+                passwordEncoder.encode(command.password())
+        );
     }
 
     @Override

@@ -64,7 +64,7 @@ public abstract class AbstractActivityHandler<Activity extends IActivity> implem
 
     @Override
     public Optional<ActivityDto> findLatestActivity(String identity) {
-        Optional<Activity> activityOptional = activityRepository.findFirstByUserIdentityOrderByCreatedAtDesc(identity);
+        Optional<Activity> activityOptional = activityRepository.findLatestActivityByUserIdentity(identity);
 
         return activityOptional.map(activity -> mapToActivityDto().apply(activity));
 
