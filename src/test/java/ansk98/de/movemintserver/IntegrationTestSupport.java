@@ -2,10 +2,8 @@ package ansk98.de.movemintserver;
 
 import ansk98.de.movemintserver.auth.AuthenticateUserCommand;
 import ansk98.de.movemintserver.auth.AuthenticationDto;
-import ansk98.de.movemintserver.auth.IAuthService;
 import ansk98.de.movemintserver.auth.RegisterUserCommand;
 import ansk98.de.movemintserver.user.IUserRepository;
-import ansk98.de.movemintserver.user.IUserService;
 import ansk98.de.movemintserver.user.UserDetails;
 import ansk98.de.movemintserver.user.UserDetailsParams;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -32,12 +30,6 @@ public abstract class IntegrationTestSupport {
     private MockMvc mockMvc;
 
     @Autowired
-    private IUserService userService;
-
-    @Autowired
-    private IAuthService authService;
-
-    @Autowired
     private IUserRepository userRepository;
 
     private final ObjectMapper objectMapper = new ObjectMapper()
@@ -52,9 +44,15 @@ public abstract class IntegrationTestSupport {
     }
 
     public ResultActions requestAs(String identity, MockHttpServletRequestBuilder requestBuilder) {
-        AuthenticationDto authenticationDto = authService.login(new AuthenticateUserCommand(identity, ""));
-
+        AuthenticateUserCommand authenticateUserCommand = new AuthenticateUserCommand(identity, "");
         try {
+            AuthenticationDto authenticationDto = asObject(
+                    mockMvc.perform(MockMvcRequestBuilders.post("/auth/login")
+                            .content(toJson(authenticateUserCommand))
+                            .contentType(MediaType.APPLICATION_JSON)).andReturn().getResponse().getContentAsString(),
+                    AuthenticationDto.class
+            );
+
             return mockMvc.perform(requestBuilder.header(AUTHORIZATION, "Bearer " + authenticationDto.accessToken().token()))
                     .andDo(MockMvcResultHandlers.print());
         } catch (Exception e) {
@@ -105,6 +103,10 @@ public abstract class IntegrationTestSupport {
     }
 
     <T> T asObject(String json, Class<T> clazz) {
-        return objectMapper.convertValue(json, clazz);
+        try {
+            return objectMapper.readValue(json, clazz);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
