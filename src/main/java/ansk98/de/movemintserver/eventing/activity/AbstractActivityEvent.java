@@ -1,7 +1,7 @@
 package ansk98.de.movemintserver.eventing.activity;
 
 import ansk98.de.movemintserver.activities.common.ActivityType;
-import ansk98.de.movemintserver.eventing.IActivityEvent;
+import ansk98.de.movemintserver.eventing.IEvent;
 
 import java.time.ZonedDateTime;
 import java.util.UUID;
@@ -11,18 +11,18 @@ import java.util.UUID;
  *
  * @author Anton Skripin (anton.tech98@gmail.com)
  */
-public abstract class AbstractActivityEvent implements IActivityEvent {
+public abstract class AbstractActivityEvent implements IEvent {
 
     private final UUID id;
     private final ActivityType activityType;
     private final ZonedDateTime createdAt;
-    private final String userIdentity;
+    private final String identity;
 
-    protected AbstractActivityEvent(UUID id, ActivityType activityType, ZonedDateTime createdAt, String userIdentity) {
+    protected AbstractActivityEvent(UUID id, ActivityType activityType, ZonedDateTime createdAt, String identity) {
         this.id = id;
         this.activityType = activityType;
         this.createdAt = createdAt;
-        this.userIdentity = userIdentity;
+        this.identity = identity;
     }
 
     public UUID getId() {
@@ -37,7 +37,8 @@ public abstract class AbstractActivityEvent implements IActivityEvent {
         return createdAt;
     }
 
-    public String getUserIdentity() {
-        return userIdentity;
+    @Override
+    public String getIdentity() {
+        return identity;
     }
 }

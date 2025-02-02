@@ -1,9 +1,11 @@
 package ansk98.de.movemintserver.eventing;
 
 /**
- * Activity event.
+ * Default event signature.
  *
  * @author Anton Skripin (anton.tech98@gmail.com)
  */
-public interface IActivityEvent {
+public interface IEvent {
+
+    String getIdentity();
 }

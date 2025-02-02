@@ -7,7 +7,6 @@ import ansk98.de.movemintserver.user.UserDetailsParams;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -77,8 +76,7 @@ public class UserIntegrationTest extends IntegrationTestSupport {
         UpdateUserCommand updateUserCommand = new UpdateUserCommand(USER_ANTON, userDetails);
 
         requestAs(USER_ANTON, MockMvcRequestBuilders.put(UPDATE_USER_PATH)
-                .content(toJson(updateUserCommand))
-                .contentType(MediaType.APPLICATION_JSON))
+                .content(toJson(updateUserCommand)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.identity").value(USER_ANTON))
                 .andExpect(jsonPath("$.userDetailsParams.name").value(newName))
@@ -91,22 +89,22 @@ public class UserIntegrationTest extends IntegrationTestSupport {
         // test validation
         UpdateUserCommand notValidEmailCommand = new UpdateUserCommand("abc.", userDetails);
         requestAs(USER_ANTON, MockMvcRequestBuilders.put(UPDATE_USER_PATH)
-                .content(toJson(notValidEmailCommand)).contentType(MediaType.APPLICATION_JSON))
+                .content(toJson(notValidEmailCommand)))
                 .andExpect(status().isBadRequest());
 
         UpdateUserCommand notValidUserDetailsCommand = new UpdateUserCommand(USER_TEST,
                 new UserDetailsParams(null, LocalDate.now(), null, 100, 50, null));
 
-        requestAs(USER_TEST, MockMvcRequestBuilders.put(UPDATE_USER_PATH).content(toJson(notValidUserDetailsCommand)).contentType(MediaType.APPLICATION_JSON))
+        requestAs(USER_TEST, MockMvcRequestBuilders.put(UPDATE_USER_PATH).content(toJson(notValidUserDetailsCommand)))
                 .andExpect(status().isBadRequest());
 
         // a user can update only their profile
         UpdateUserCommand userCommand = new UpdateUserCommand(USER_TEST, userDetails);
-        requestAs(USER_ANTON, MockMvcRequestBuilders.put(UPDATE_USER_PATH).content(toJson(userCommand)).contentType(MediaType.APPLICATION_JSON))
+        requestAs(USER_ANTON, MockMvcRequestBuilders.put(UPDATE_USER_PATH).content(toJson(userCommand)))
                 .andExpect(status().isBadRequest());
 
         // anonymous user should not be able to update users
-        requestAnonymous(MockMvcRequestBuilders.get(UPDATE_USER_PATH).content(toJson(userCommand)).contentType(MediaType.APPLICATION_JSON))
+        requestAnonymous(MockMvcRequestBuilders.get(UPDATE_USER_PATH).content(toJson(userCommand)))
                 .andExpect(status().isForbidden());
 
         deleteUser(USER_TEST);
@@ -122,7 +120,7 @@ public class UserIntegrationTest extends IntegrationTestSupport {
 
         Function<ResetPasswordCommand, MockHttpServletRequestBuilder> requestBuilder = resetPasswordCommand -> MockMvcRequestBuilders
                 .post(RESET_PASSWORD_PATH)
-                .contentType(MediaType.APPLICATION_JSON)
+
                 .content(toJson(resetPasswordCommand));
 
         BiFunction<String, ResetPasswordCommand, ResultActions> resetPassword = (identity, resetPasswordCommand) ->

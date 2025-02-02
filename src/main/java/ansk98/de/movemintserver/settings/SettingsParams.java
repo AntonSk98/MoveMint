@@ -16,7 +16,7 @@ import java.util.List;
  * @param notificationSettings notification settings
  */
 public record SettingsParams(@Valid @NotNull ActivityDetails activitySettings,
-                             @Valid @NotEmpty @Size(min = 7, max = 7) List<NotificationEntryDetail> notificationSettings) {
+                             @Valid @NotEmpty @Size(min = 1, max = 7) List<NotificationEntryDetail> notificationSettings) {
 
     public record ActivityDetails(boolean enabledStretchingNotification,
                                   boolean enableRestVisionNotification,

@@ -1,6 +1,6 @@
 package ansk98.de.movemintserver.settings;
 
-import ansk98.de.movemintserver.user.User;
+import ansk98.de.movemintserver.eventing.user.BeforeUserDeletedEvent;
 
 /**
  * Service to manage the setting of a user.
@@ -8,6 +8,8 @@ import ansk98.de.movemintserver.user.User;
  * @author Anton Skripin (anton.tech98@gmail.com)
  */
 public interface ISettingsService {
+
+    void onUserDeleted(BeforeUserDeletedEvent beforeUserDeletedEvent);
 
     SettingsParams findSettingsForAuthenticatedUser();
 

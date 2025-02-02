@@ -1,12 +1,17 @@
 package ansk98.de.movemintserver.settings;
 
+import ansk98.de.movemintserver.eventing.user.BeforeUserDeletedEvent;
 import ansk98.de.movemintserver.user.IUserService;
 import ansk98.de.movemintserver.user.User;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * Implementation of {@link ISettingsService}.
@@ -25,10 +30,26 @@ public class SettingsService implements ISettingsService {
     }
 
     @Override
+    @Transactional
+    @EventListener(BeforeUserDeletedEvent.class)
+    public void onUserDeleted(BeforeUserDeletedEvent beforeUserDeletedEvent) {
+        String identity = beforeUserDeletedEvent.getIdentity();
+        Optional.ofNullable(settingsRepository.findByUserIdentity(identity))
+                .ifPresent(settingsRepository::delete);
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public SettingsParams findSettingsForAuthenticatedUser() {
         User user = userService.requireUser(Function.identity());
-        return map(settingsRepository.findByUser(user));
+
+        Settings settings = settingsRepository.findByUser(user);
+
+        if (settings == null) {
+            return null;
+        }
+
+        return map(settings);
     }
 
     @Override
@@ -42,7 +63,11 @@ public class SettingsService implements ISettingsService {
     @Transactional
     public void updateSettings(SettingsParams settings) {
         User user = userService.requireUser(Function.identity());
-        Settings currentSettings = settingsRepository.findByUser(user);
+        Settings currentSettings = Optional
+                .ofNullable(settingsRepository.findByUser(user))
+                .orElseThrow(() -> new IllegalArgumentException("Current settings not found"));
+
+
         currentSettings.update(
                 new ActivitySettings.Builder()
                         .enableWorkStandingNotification(settings.activitySettings().enableWorkStandingNotification())
@@ -70,7 +95,7 @@ public class SettingsService implements ISettingsService {
     }
 
     private Settings map(User user, SettingsParams settings) {
-        List<NotificationPolicy> notificationPolicies = map(settings.notificationSettings());
+        Set<NotificationPolicy> notificationPolicies = map(settings.notificationSettings());
 
         ActivitySettings.Builder activitySettings = new ActivitySettings.Builder()
                 .enableRestVisionNotification(settings.activitySettings().enableRestVisionNotification())
@@ -81,11 +106,11 @@ public class SettingsService implements ISettingsService {
         return Settings.create(user, activitySettings, notificationPolicies);
     }
 
-    private List<NotificationPolicy> map(List<SettingsParams.NotificationEntryDetail> notificationEntryDetails) {
+    private Set<NotificationPolicy> map(List<SettingsParams.NotificationEntryDetail> notificationEntryDetails) {
         return notificationEntryDetails.stream().map(notificationDetails -> NotificationPolicy.of(
                 notificationDetails.dayOfWeek(),
                 notificationDetails.from(),
                 notificationDetails.to())
-        ).toList();
+        ).collect(Collectors.toSet());
     }
 }

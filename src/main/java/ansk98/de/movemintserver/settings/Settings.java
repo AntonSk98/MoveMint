@@ -3,17 +3,12 @@ package ansk98.de.movemintserver.settings;
 import ansk98.de.movemintserver.activities.common.ActivityType;
 import ansk98.de.movemintserver.user.User;
 import jakarta.persistence.*;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Entity that contains settings of a user.
@@ -29,30 +24,29 @@ public class Settings {
     @Embedded
     private ActivitySettings activitySettings;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "settings_id", nullable = false)
-    private List<NotificationPolicy> notificationSettings;
+    @ElementCollection
+    @CollectionTable(name = "notification_policy", joinColumns = @JoinColumn(name = "settings_id"))
+    private Set<NotificationPolicy> notificationSettings;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
     protected Settings() {
 
     }
 
-    private Settings(User user, ActivitySettings activitySettings, List<NotificationPolicy> notificationSettings) {
+    private Settings(User user, ActivitySettings activitySettings, Set<NotificationPolicy> notificationSettings) {
         this.id = UUID.randomUUID();
         this.user = user;
         this.activitySettings = activitySettings;
         this.notificationSettings = notificationSettings;
     }
 
-    public static Settings create(User user, ActivitySettings.Builder activitySettings, List<NotificationPolicy> notificationSettings) {
+    public static Settings create(User user, ActivitySettings.Builder activitySettings, Set<NotificationPolicy> notificationSettings) {
         return new Settings(user, activitySettings.build(), notificationSettings);
     }
 
-    public void update(ActivitySettings.Builder activitySettings, List<NotificationPolicy> notificationSettings) {
+    public void update(ActivitySettings.Builder activitySettings, Set<NotificationPolicy> notificationSettings) {
         this.activitySettings = activitySettings.build();
         this.notificationSettings = notificationSettings;
     }
@@ -65,8 +59,8 @@ public class Settings {
         return activitySettings;
     }
 
-    public List<NotificationPolicy> getNotificationSettings() {
-        return Collections.unmodifiableList(notificationSettings);
+    public Set<NotificationPolicy> getNotificationSettings() {
+        return Collections.unmodifiableSet(notificationSettings);
     }
 
     public User getUser() {

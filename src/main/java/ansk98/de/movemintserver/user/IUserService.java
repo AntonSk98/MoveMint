@@ -2,6 +2,7 @@ package ansk98.de.movemintserver.user;
 
 import ansk98.de.movemintserver.auth.RegisterUserCommand;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.function.Function;
 
@@ -51,4 +52,10 @@ public interface IUserService extends UserDetailsService {
      * @param command {@link ResetPasswordCommand}
      */
     void resetPassword(ResetPasswordCommand command);
+
+    /**
+     * Deletes a user by their identity.
+     * @param identity user identity.
+     */
+    void deleteUser(String identity);
 }

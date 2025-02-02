@@ -17,7 +17,8 @@ public class EventPublisher implements IEventPublisher {
         this.applicationEventPublisher = applicationEventPublisher;
     }
 
-    public void publishEvent(IActivityEvent activityEvent) {
+    @Override
+    public void publishEvent(IEvent activityEvent) {
         applicationEventPublisher.publishEvent(activityEvent);
     }
 }

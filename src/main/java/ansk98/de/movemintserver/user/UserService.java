@@ -2,6 +2,8 @@ package ansk98.de.movemintserver.user;
 
 import ansk98.de.movemintserver.auth.AuthenticationUtils;
 import ansk98.de.movemintserver.auth.RegisterUserCommand;
+import ansk98.de.movemintserver.eventing.IEventPublisher;
+import ansk98.de.movemintserver.eventing.user.BeforeUserDeletedEvent;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -23,11 +25,14 @@ public class UserService implements IUserService {
 
     private final IUserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final IEventPublisher eventPublisher;
 
     public UserService(IUserRepository userRepository,
-                       PasswordEncoder passwordEncoder) {
+                       PasswordEncoder passwordEncoder,
+                       IEventPublisher eventPublisher) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.eventPublisher = eventPublisher;
     }
 
     @Override
@@ -104,6 +109,17 @@ public class UserService implements IUserService {
                 oldPassword -> passwordEncoder.matches(command.oldPassword(), oldPassword),
                 passwordEncoder.encode(command.password())
         );
+    }
+
+    @Override
+    @Transactional
+    public void deleteUser(String identity) {
+        User toBeDeletedUser = userRepository
+                .findByIdentity(identity)
+                .orElseThrow(() -> new UserNotFoundException("User with identity " + identity + " not found"));
+        eventPublisher.publishEvent(new BeforeUserDeletedEvent(toBeDeletedUser.getIdentity()));
+
+        userRepository.delete(toBeDeletedUser);
     }
 
     @Override
