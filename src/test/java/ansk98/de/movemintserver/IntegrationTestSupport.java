@@ -28,11 +28,13 @@ public abstract class IntegrationTestSupport {
 
     static final String LOGIN_PATH = "/auth/login";
 
-    @Autowired
-    private MockMvc mockMvc;
+    static final String DEFAULT_PASSWORD = "";
 
     @Autowired
-    private IUserService userService;
+    MockMvc mockMvc;
+
+    @Autowired
+    IUserService userService;
 
     private final ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
 
@@ -45,7 +47,7 @@ public abstract class IntegrationTestSupport {
     }
 
     ResultActions requestAs(String identity, MockHttpServletRequestBuilder requestBuilder) {
-        AuthenticateUserCommand authenticateUserCommand = new AuthenticateUserCommand(identity, "");
+        AuthenticateUserCommand authenticateUserCommand = new AuthenticateUserCommand(identity, DEFAULT_PASSWORD);
         try {
             AuthenticationDto authenticationDto = toObject(
                     mockMvc.perform(MockMvcRequestBuilders.post(LOGIN_PATH)
@@ -67,18 +69,7 @@ public abstract class IntegrationTestSupport {
     }
 
     void createUser(String identity, ZoneId zoneId) {
-        RegisterUserCommand command = new RegisterUserCommand(
-                identity,
-                "",
-                new UserDetailsParams(
-                        identity,
-                        LocalDate.now().minusYears(RandomUtils.secure().randomInt(20, 70)),
-                        RandomUtils.secure().randomBoolean() ? UserDetails.Gender.MALE : UserDetails.Gender.FEMALE,
-                        RandomUtils.secure().randomInt(140, 200),
-                        RandomUtils.secure().randomInt(40, 100),
-                        zoneId
-                )
-        );
+        RegisterUserCommand command = registerUserCommand(identity, zoneId);
 
         try {
             mockMvc.perform(MockMvcRequestBuilders
@@ -90,6 +81,21 @@ public abstract class IntegrationTestSupport {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    RegisterUserCommand registerUserCommand(String identity, ZoneId zoneId) {
+        return new RegisterUserCommand(
+                identity,
+                DEFAULT_PASSWORD,
+                new UserDetailsParams(
+                        identity,
+                        LocalDate.now().minusYears(RandomUtils.secure().randomInt(20, 70)),
+                        RandomUtils.secure().randomBoolean() ? UserDetails.Gender.MALE : UserDetails.Gender.FEMALE,
+                        RandomUtils.secure().randomInt(140, 200),
+                        RandomUtils.secure().randomInt(40, 100),
+                        zoneId
+                )
+        );
     }
 
     void deleteUser(String identity) {

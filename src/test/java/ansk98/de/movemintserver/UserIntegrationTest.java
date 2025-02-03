@@ -131,7 +131,7 @@ public class UserIntegrationTest extends IntegrationTestSupport {
         resetPassword.apply(USER_ANTON, resetPasswordCommandFalseOldPassword).andExpect(status().isBadRequest());
 
         // user is not allowed to reset password for another user
-        ResetPasswordCommand resetPasswordCommand = new ResetPasswordCommand(USER_ANTON, "", newPassword);
+        ResetPasswordCommand resetPasswordCommand = new ResetPasswordCommand(USER_ANTON, DEFAULT_PASSWORD, newPassword);
         resetPassword.apply(USER_TEST, resetPasswordCommand).andExpect(status().isBadRequest());
 
         // validation
