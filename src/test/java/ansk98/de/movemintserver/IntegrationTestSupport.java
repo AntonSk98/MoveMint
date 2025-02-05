@@ -27,6 +27,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public abstract class IntegrationTestSupport {
 
     static final String LOGIN_PATH = "/auth/login";
+    static final String DEFINE_SETTINGS_PATH = "/public/settings/define_settings";
+
 
     static final String DEFAULT_PASSWORD = "";
 

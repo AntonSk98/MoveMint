@@ -76,7 +76,6 @@ public class NotificationService implements INotificationService {
     private void sendAbstractActivityNotification(ActivityType activityType) {
         userRepository
                 .streamUserDetails()
-                .parallel()
                 .filter(user -> shouldNotifyUserAbout(activityType).test(user))
                 .forEach(user -> {
                     UserDeviceToken userDeviceToken = userDeviceTokenRepository.findByUserIdentity(user.getIdentity());
@@ -88,6 +87,10 @@ public class NotificationService implements INotificationService {
     private Predicate<NotificationUserProjection> shouldNotifyUserAbout(ActivityType activityType) {
         return user -> {
             Settings settings = settingsRepository.findByUserIdentity(user.getIdentity());
+            if (settings == null) {
+                return false;
+            }
+
             if (!settings.isNotificationEnabledFor(activityType)) {
                 return false;
             }

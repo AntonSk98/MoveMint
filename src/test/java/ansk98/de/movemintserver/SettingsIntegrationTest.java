@@ -28,7 +28,6 @@ public class SettingsIntegrationTest extends IntegrationTestSupport {
 
     private static final String TEST_USER = "testuser@gmail.com";
 
-    private static final String DEFINE_SETTINGS_PATH = "/public/settings/define_settings";
     private static final String UPDATE_SETTINGS_PATH = "/public/settings/update_settings";
     private static final String FIND_SETTINGS_PATH = "/public/settings/find";
 
