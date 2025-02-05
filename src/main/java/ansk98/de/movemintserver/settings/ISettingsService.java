@@ -9,7 +9,7 @@ import ansk98.de.movemintserver.eventing.user.BeforeUserDeletedEvent;
  */
 public interface ISettingsService {
 
-    void onUserDeleted(BeforeUserDeletedEvent beforeUserDeletedEvent);
+    void onBeforeUserDeleted(BeforeUserDeletedEvent beforeUserDeletedEvent);
 
     SettingsParams findSettingsForAuthenticatedUser();
 

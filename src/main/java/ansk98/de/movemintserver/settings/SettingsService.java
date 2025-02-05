@@ -32,7 +32,7 @@ public class SettingsService implements ISettingsService {
     @Override
     @Transactional
     @EventListener(BeforeUserDeletedEvent.class)
-    public void onUserDeleted(BeforeUserDeletedEvent beforeUserDeletedEvent) {
+    public void onBeforeUserDeleted(BeforeUserDeletedEvent beforeUserDeletedEvent) {
         String identity = beforeUserDeletedEvent.getIdentity();
         Optional.ofNullable(settingsRepository.findByUserIdentity(identity))
                 .ifPresent(settingsRepository::delete);

@@ -36,7 +36,7 @@ public abstract class IntegrationTestSupport {
     @Autowired
     IUserService userService;
 
-    private final ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
+    final ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
 
     ResultActions requestAnonymous(MockHttpServletRequestBuilder requestBuilder) {
         try {

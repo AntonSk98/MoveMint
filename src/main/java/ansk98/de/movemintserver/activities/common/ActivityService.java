@@ -1,5 +1,7 @@
 package ansk98.de.movemintserver.activities.common;
 
+import ansk98.de.movemintserver.eventing.user.BeforeUserDeletedEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -18,6 +20,11 @@ public class ActivityService implements IActivityServiceDelegate {
 
     public ActivityService(List<IActivityHandler> activityServices) {
         this.activityServices = activityServices;
+    }
+
+    @EventListener(BeforeUserDeletedEvent.class)
+    public void onBeforeUserDeleted(BeforeUserDeletedEvent event) {
+        activityServices.forEach(activityService -> activityService.deleteActivities(event.getIdentity()));
     }
 
     @Override

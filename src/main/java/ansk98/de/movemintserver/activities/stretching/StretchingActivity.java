@@ -21,7 +21,7 @@ import static ansk98.de.movemintserver.activities.common.ActivityType.STRETCHING
 public class StretchingActivity extends AbstractActivity {
 
     @JoinColumn(name = "stretching_activity")
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     List<Exercise> exercises;
 
     /**

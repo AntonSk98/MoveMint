@@ -1,7 +1,10 @@
 package ansk98.de.movemintserver.activities.common;
 
+import ansk98.de.movemintserver.auth.AuthenticationUtils;
 import ansk98.de.movemintserver.eventing.IEventPublisher;
 import ansk98.de.movemintserver.user.IUserService;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -50,14 +53,20 @@ public abstract class AbstractActivityHandler<Activity extends IActivity> implem
 
     @Override
     public void acceptActivity(AcceptActivityCommand acceptCommand) {
-        Activity activity = activityRepository.getReferenceById(acceptCommand.id());
+        Activity activity = activityRepository
+                .findById(acceptCommand.id())
+                .orElseThrow(ActivityOperationFailedException::new);
+        validateAuthenticatedUserCanDo(activity.getUserIdentity());
         eventPublisher.publishEvent(activity.accept());
         activityRepository.delete(activity);
     }
 
     @Override
     public void rejectActivity(RejectActivityCommand rejectCommand) {
-        Activity activity = activityRepository.getReferenceById(rejectCommand.id());
+        Activity activity = activityRepository
+                .findById(rejectCommand.id())
+                .orElseThrow(ActivityOperationFailedException::new);
+        validateAuthenticatedUserCanDo(activity.getUserIdentity());
         eventPublisher.publishEvent(activity.reject());
         activityRepository.delete(activity);
     }
@@ -75,10 +84,22 @@ public abstract class AbstractActivityHandler<Activity extends IActivity> implem
         return getActivityType().equals(activityType);
     }
 
+    @Override
+    @Transactional
+    public void deleteActivities(String identity) {
+        activityRepository.findActivityIdsBy(identity).forEach(activityRepository::deleteById);
+    }
+
     public abstract Function<Activity, ActivityDto> mapToActivityDto();
 
     public abstract ActivityType getActivityType();
 
     public abstract Activity mapToActivity(CreateActivityCommand activityCommand);
+
+    private static void validateAuthenticatedUserCanDo(String activityUsername) {
+        if (!StringUtils.equals(activityUsername, AuthenticationUtils.requireUserIdentity())) {
+            throw new ActivityOperationFailedException();
+        }
+    }
 
 }

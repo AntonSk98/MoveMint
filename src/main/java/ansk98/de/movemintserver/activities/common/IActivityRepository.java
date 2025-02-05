@@ -21,4 +21,7 @@ public interface IActivityRepository<Entity extends IActivity> extends JpaReposi
 
     @Query("SELECT activity FROM #{#entityName} activity WHERE activity.user.identity = :identity ORDER BY activity.createdAt DESC")
     Optional<Entity> findLatestActivityByUserIdentity(String identity);
+
+    @Query("SELECT activity.id FROM #{#entityName} activity WHERE activity.user.identity = :identity")
+    List<UUID> findActivityIdsBy(String identity);
 }

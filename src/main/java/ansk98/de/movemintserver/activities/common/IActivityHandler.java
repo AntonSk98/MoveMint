@@ -27,4 +27,6 @@ public interface IActivityHandler extends IActivityService {
      * @return latest activity
      */
     Optional<ActivityDto> findLatestActivity(String identity);
+
+    void deleteActivities(String identity);
 }

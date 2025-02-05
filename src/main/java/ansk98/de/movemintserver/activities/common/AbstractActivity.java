@@ -8,13 +8,11 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MappedSuperclass;
-import org.hibernate.annotations.OnDelete;
 
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
 import static jakarta.persistence.FetchType.LAZY;
-import static org.hibernate.annotations.OnDeleteAction.CASCADE;
 
 /**
  * Common properties shared by all {@link IActivity} entities.
@@ -29,7 +27,6 @@ public abstract class AbstractActivity implements IActivity {
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "user_id", nullable = false)
-    @OnDelete(action = CASCADE)
     private User user;
 
     public AbstractActivity(@Nonnull User user) {
