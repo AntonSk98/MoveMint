@@ -1,7 +1,6 @@
 package ansk98.de.movemintserver.activities.vision;
 
 import ansk98.de.movemintserver.activities.common.*;
-import ansk98.de.movemintserver.eventing.IEventPublisher;
 import ansk98.de.movemintserver.user.IUserService;
 import org.springframework.stereotype.Service;
 
@@ -20,9 +19,8 @@ public class VisionRestActivityHandler extends AbstractActivityHandler<VisionRes
 
     public VisionRestActivityHandler(IVisionRestActivityRepository visionRestActivityRepository,
                                      IUserService userService,
-                                     ActivitiesMetadata activitiesMetadata,
-                                     IEventPublisher eventPublisher) {
-        super(visionRestActivityRepository, userService, activitiesMetadata, eventPublisher);
+                                     ActivitiesMetadata activitiesMetadata) {
+        super(visionRestActivityRepository, userService, activitiesMetadata);
     }
 
     @Override

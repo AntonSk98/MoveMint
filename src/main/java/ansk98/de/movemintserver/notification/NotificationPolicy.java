@@ -19,7 +19,9 @@ public record NotificationPolicy(List<NotificationPolicyEntry> policy) {
     }
 
     public Duration getActivityFrequency(ActivityType type) {
-        return policy.stream().filter(notificationPolicyEntry -> type.equals(notificationPolicyEntry.type()))
+        return policy
+                .stream()
+                .filter(notificationPolicyEntry -> type.equals(notificationPolicyEntry.type()))
                 .findFirst()
                 .map(NotificationPolicyEntry::frequency)
                 .orElseThrow(() -> new IllegalStateException("No notification policy is found for type " + type));

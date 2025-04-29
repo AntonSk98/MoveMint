@@ -4,7 +4,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
 /**
- * Projection of a user to manage their notificatins.
+ * Projection of a user to manage their notifications.
  *
  * @author Anton Skripin (anton.tech98@gmail.com)
  */

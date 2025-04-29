@@ -4,7 +4,6 @@ import ansk98.de.movemintserver.activities.common.*;
 import ansk98.de.movemintserver.coaching.ExerciseRoutine;
 import ansk98.de.movemintserver.coaching.IExerciseCoachClient;
 import ansk98.de.movemintserver.coaching.PhysicalAttributes;
-import ansk98.de.movemintserver.eventing.IEventPublisher;
 import ansk98.de.movemintserver.user.IUserService;
 import ansk98.de.movemintserver.user.UserDto;
 import org.springframework.stereotype.Service;
@@ -29,8 +28,8 @@ public class StretchingActivityHandler extends AbstractActivityHandler<Stretchin
     public StretchingActivityHandler(IActivityRepository<StretchingActivity> stretchingActivityRepository,
                                      IUserService userService,
                                      ActivitiesMetadata activitiesMetadata,
-                                     IEventPublisher eventPublisher, IExerciseCoachClient exerciseCoachClient) {
-        super(stretchingActivityRepository, userService, activitiesMetadata, eventPublisher);
+                                     IExerciseCoachClient exerciseCoachClient) {
+        super(stretchingActivityRepository, userService, activitiesMetadata);
         this.exerciseCoachClient = exerciseCoachClient;
     }
 

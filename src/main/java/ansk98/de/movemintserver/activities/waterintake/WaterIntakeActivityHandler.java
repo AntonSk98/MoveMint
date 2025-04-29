@@ -1,7 +1,6 @@
 package ansk98.de.movemintserver.activities.waterintake;
 
 import ansk98.de.movemintserver.activities.common.*;
-import ansk98.de.movemintserver.eventing.IEventPublisher;
 import ansk98.de.movemintserver.user.IUserService;
 import org.springframework.stereotype.Service;
 
@@ -17,9 +16,8 @@ public class WaterIntakeActivityHandler extends AbstractActivityHandler<WaterInt
 
     public WaterIntakeActivityHandler(IActivityRepository<WaterIntakeActivity> activityRepository,
                                       IUserService userService,
-                                      ActivitiesMetadata activitiesMetadata,
-                                      IEventPublisher eventPublisher) {
-        super(activityRepository, userService, activitiesMetadata, eventPublisher);
+                                      ActivitiesMetadata activitiesMetadata) {
+        super(activityRepository, userService, activitiesMetadata);
     }
 
     @Override

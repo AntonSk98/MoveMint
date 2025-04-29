@@ -30,7 +30,4 @@ public class ActivityNotificationScheduler implements IActivityNotificationSched
     public void removeObsoleteActivities() {
 
     }
-
-    // if current_time (at user timezone) (9:29am) .isBefore() 'from_notify' (9am) + frequency (60m) + random_offset (5m) -> skip
-    // if current_time (at user timezone) isAfter() 'to_notify'
 }

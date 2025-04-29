@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
  * @author Anton Skripin (anton.tech98@gmail.com)
  */
 @Component
-public class EventPublisher implements IEventPublisher {
+class EventPublisher implements IEventPublisher {
 
     private final ApplicationEventPublisher applicationEventPublisher;
 

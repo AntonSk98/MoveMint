@@ -5,6 +5,6 @@ package ansk98.de.movemintserver.eventing;
  *
  * @author Anton Skripin (anton.tech98@gmail.com)
  */
-public interface IEventPublisher {
+interface IEventPublisher {
     void publishEvent(IEvent activityEvent);
 }

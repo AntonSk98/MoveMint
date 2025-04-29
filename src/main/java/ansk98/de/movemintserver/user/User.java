@@ -1,8 +1,11 @@
 package ansk98.de.movemintserver.user;
 
+import ansk98.de.movemintserver.eventing.DomainEventAware;
+import ansk98.de.movemintserver.eventing.user.BeforeUserDeletedEvent;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.ZonedDateTime;
 import java.util.UUID;
@@ -15,7 +18,7 @@ import java.util.function.Predicate;
  */
 @Entity
 @Table(name = "users")
-public class User {
+public class User extends DomainEventAware {
 
     @Id
     private UUID id;
@@ -61,7 +64,7 @@ public class User {
      * @param identity    identity
      * @param userDetails user details
      */
-    public void updateUser(String identity, UserDetails.Builder userDetails) {
+    public void updateUser(String identity, @NotNull UserDetails.Builder userDetails) {
         this.identity = identity;
         this.userDetails = userDetails.build();
     }
@@ -77,6 +80,13 @@ public class User {
             throw new WrongCredentialsException();
         }
         this.password = newPassword;
+    }
+
+    /**
+     * Publishes an event before a {@link User} is deleted.
+     */
+    public void onBeforeDeleted() {
+        publish(new BeforeUserDeletedEvent(identity));
     }
 
     public UUID getId() {

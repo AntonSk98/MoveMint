@@ -1,7 +1,6 @@
 package ansk98.de.movemintserver.activities.common;
 
 import ansk98.de.movemintserver.auth.AuthenticationUtils;
-import ansk98.de.movemintserver.eventing.IEventPublisher;
 import ansk98.de.movemintserver.user.IUserService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,16 +22,13 @@ public abstract class AbstractActivityHandler<Activity extends IActivity> implem
     protected final IActivityRepository<Activity> activityRepository;
     protected final IUserService userService;
     protected final ActivitiesMetadata activitiesMetadata;
-    protected final IEventPublisher eventPublisher;
 
     public AbstractActivityHandler(IActivityRepository<Activity> activityRepository,
                                    IUserService userService,
-                                   ActivitiesMetadata activitiesMetadata,
-                                   IEventPublisher eventPublisher) {
+                                   ActivitiesMetadata activitiesMetadata) {
         this.activityRepository = activityRepository;
         this.userService = userService;
         this.activitiesMetadata = activitiesMetadata;
-        this.eventPublisher = eventPublisher;
     }
 
     @Override
@@ -57,7 +53,7 @@ public abstract class AbstractActivityHandler<Activity extends IActivity> implem
                 .findById(acceptCommand.id())
                 .orElseThrow(ActivityOperationFailedException::new);
         validateAuthenticatedUserCanDo(activity.getUserIdentity());
-        eventPublisher.publishEvent(activity.accept());
+        activity.accept();
         activityRepository.delete(activity);
     }
 
@@ -67,7 +63,7 @@ public abstract class AbstractActivityHandler<Activity extends IActivity> implem
                 .findById(rejectCommand.id())
                 .orElseThrow(ActivityOperationFailedException::new);
         validateAuthenticatedUserCanDo(activity.getUserIdentity());
-        eventPublisher.publishEvent(activity.reject());
+        activity.reject();
         activityRepository.delete(activity);
     }
 

@@ -21,9 +21,9 @@ public interface IActivity {
 
     String getUserIdentity();
 
-    ActivityAcceptedEvent accept();
+    void accept();
 
-    ActivityRejectedEvent reject();
+    void reject();
 
     default <T extends IActivity> T map(Class<T> clazz) {
         if (this.getClass().equals(clazz)) {
