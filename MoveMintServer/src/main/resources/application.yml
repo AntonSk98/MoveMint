@@ -41,6 +41,15 @@ notification:
       frequency: 70m
     - type: VISION_REST_ACTIVITY
       frequency: 20m
+  push:
+    - type: STRETCHING_ACTIVITY
+      message: STRETCHING_ACTIVITY
+    - type: WATER_INTAKE_ACTIVITY
+      message: WATER_INTAKE_ACTIVITY
+    - type: WORK_STANDING_ACTIVITY
+      message: WORK_STANDING_ACTIVITY
+    - type: VISION_REST_ACTIVITY
+      message: VISION_REST_ACTIVITY
 
 
 spring:

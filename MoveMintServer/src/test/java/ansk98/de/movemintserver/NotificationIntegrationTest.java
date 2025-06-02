@@ -32,7 +32,6 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
 
-import static io.jsonwebtoken.lang.Collections.emptyList;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -96,7 +95,7 @@ public class NotificationIntegrationTest extends IntegrationTestSupport {
 
         defineSettings(TEST_USER_ONE, settingsParams);
         activityNotificationScheduler.sendStretchingActivityNotification();
-        verify(clientPushNotifier, never()).notifyClientBy(any());
+        verify(clientPushNotifier, never()).notifyClientBy(any(), any());
     }
 
     @Test
@@ -120,7 +119,7 @@ public class NotificationIntegrationTest extends IntegrationTestSupport {
         );
         defineSettings(TEST_USER_ONE, settingsParams);
         activityNotificationScheduler.sendStretchingActivityNotification();
-        verify(clientPushNotifier, never()).notifyClientBy(any());
+        verify(clientPushNotifier, never()).notifyClientBy(any(), any());
     }
 
     @Test
@@ -144,7 +143,7 @@ public class NotificationIntegrationTest extends IntegrationTestSupport {
         );
         defineSettings(TEST_USER_ONE, settingsParams);
         activityNotificationScheduler.sendStretchingActivityNotification();
-        verify(clientPushNotifier, never()).notifyClientBy(any());
+        verify(clientPushNotifier, never()).notifyClientBy(any(), any());
     }
 
     @Test
@@ -191,7 +190,7 @@ public class NotificationIntegrationTest extends IntegrationTestSupport {
 
         defineSettings(TEST_USER_ONE, settingsParams);
         activityNotificationScheduler.sendStretchingActivityNotification();
-        verify(clientPushNotifier, times(1)).notifyClientBy(any());
+        verify(clientPushNotifier, times(1)).notifyClientBy(any(), eq(ActivityType.STRETCHING_ACTIVITY));
         Mockito.reset(userRepository);
 
 
@@ -203,7 +202,7 @@ public class NotificationIntegrationTest extends IntegrationTestSupport {
                         )
                 );
         activityNotificationScheduler.sendStretchingActivityNotification();
-        verify(clientPushNotifier, times(2)).notifyClientBy(any());
+        verify(clientPushNotifier, times(2)).notifyClientBy(any(), eq(ActivityType.STRETCHING_ACTIVITY));
         Mockito.reset(activityService);
     }
 

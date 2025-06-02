@@ -1,7 +1,5 @@
 package ansk98.de.movemintserver.notification;
 
-import ansk98.de.movemintserver.notification.DeviceTokenRequest;
-import ansk98.de.movemintserver.notification.IUserDeviceTokenService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

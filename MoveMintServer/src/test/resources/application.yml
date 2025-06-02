@@ -51,3 +51,5 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create-drop
+
+firebase.enabled: false

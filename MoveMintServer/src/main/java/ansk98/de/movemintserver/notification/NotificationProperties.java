@@ -7,13 +7,17 @@ import java.time.Duration;
 import java.util.List;
 
 /**
- * Configuration that encapsulates the notification policy for each activity type.
+ * Configuration that encapsulates the notification properties for each activity type.
  *
  * @param policy notification policy per activity type
  * @author Anton Skripin (anton.tech98@gmail.com)
  */
 @ConfigurationProperties("notification")
-public record NotificationPolicy(List<NotificationPolicyEntry> policy) {
+public record NotificationProperties(List<NotificationPolicyEntry> policy, List<PushNotificationEntry> push) {
+
+    public record PushNotificationEntry(ActivityType type, String message) {
+
+    }
 
     public record NotificationPolicyEntry(ActivityType type, Duration frequency) {
     }
@@ -25,5 +29,14 @@ public record NotificationPolicy(List<NotificationPolicyEntry> policy) {
                 .findFirst()
                 .map(NotificationPolicyEntry::frequency)
                 .orElseThrow(() -> new IllegalStateException("No notification policy is found for type " + type));
+    }
+
+    public String getNotificationMessage(ActivityType type) {
+        return push
+                .stream()
+                .filter(pushNotificationEntry -> type.equals(pushNotificationEntry.type))
+                .findFirst()
+                .map(PushNotificationEntry::message)
+                .orElseThrow(() -> new IllegalStateException("No push notification message is found for type " + type));
     }
 }

@@ -8,6 +8,9 @@ import ansk98.de.movemintserver.settings.ISettingsRepository;
 import ansk98.de.movemintserver.settings.Settings;
 import ansk98.de.movemintserver.user.IUserRepository;
 import ansk98.de.movemintserver.user.NotificationUserProjection;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,11 +27,14 @@ import java.util.function.Predicate;
 @Service
 public class NotificationService implements INotificationService {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(NotificationService.class);
+
+
     private final IUserDeviceTokenRepository userDeviceTokenRepository;
     private final IUserRepository userRepository;
     private final IActivityServiceDelegate activityService;
     private final ISettingsRepository settingsRepository;
-    private final NotificationPolicy notificationPolicy;
+    private final NotificationProperties notificationProperties;
     private final IActivityCommand activityCommand;
     private final IClientPushNotifier pushNotifier;
 
@@ -36,14 +42,14 @@ public class NotificationService implements INotificationService {
                                IUserRepository userRepository,
                                IActivityServiceDelegate activityService,
                                ISettingsRepository settingsRepository,
-                               NotificationPolicy notificationPolicy,
+                               NotificationProperties notificationProperties,
                                IActivityCommand activityCommand,
-                               IClientPushNotifier pushNotifier) {
+                               @Autowired(required = false) IClientPushNotifier pushNotifier) {
         this.userDeviceTokenRepository = userDeviceTokenRepository;
         this.userRepository = userRepository;
         this.activityService = activityService;
         this.settingsRepository = settingsRepository;
-        this.notificationPolicy = notificationPolicy;
+        this.notificationProperties = notificationProperties;
         this.activityCommand = activityCommand;
         this.pushNotifier = pushNotifier;
     }
@@ -80,7 +86,10 @@ public class NotificationService implements INotificationService {
                 .forEach(user -> {
                     UserDeviceToken userDeviceToken = userDeviceTokenRepository.findByUserIdentity(user.getIdentity());
                     activityCommand.createForUserIdentifiedBy(user.getIdentity(), activityType);
-                    pushNotifier.notifyClientBy(userDeviceToken);
+                    Optional.ofNullable(pushNotifier)
+                            .ifPresentOrElse(
+                                    notifier -> notifier.notifyClientBy(userDeviceToken, activityType),
+                                    () -> LOGGER.warn("No push notifier is configured! Push notification will not be sent to the client {}", user.getIdentity()));
                 });
     }
 
@@ -105,7 +114,7 @@ public class NotificationService implements INotificationService {
                     ? Duration.between(latestActivity.get().getCreatedAt(), ZonedDateTime.now())
                     : Duration.between(user.getRegisteredAt(), ZonedDateTime.now());
 
-            return shouldNotifyUserAboutActivity(passedDuration, notificationPolicy.getActivityFrequency(activityType)
+            return shouldNotifyUserAboutActivity(passedDuration, notificationProperties.getActivityFrequency(activityType)
             );
         };
     }
