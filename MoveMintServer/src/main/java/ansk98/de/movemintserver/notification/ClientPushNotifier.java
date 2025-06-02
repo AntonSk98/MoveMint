@@ -33,6 +33,9 @@ public class ClientPushNotifier implements IClientPushNotifier {
 
     @Override
     public void notifyClientBy(UserDeviceToken userDeviceToken, ActivityType activityType) {
+        if (userDeviceToken == null) {
+            return;
+        }
         Message message = Message.builder()
                 .setToken(userDeviceToken.getDeviceToken())
                 .putData("message", notificationProperties.getNotificationMessage(activityType))
