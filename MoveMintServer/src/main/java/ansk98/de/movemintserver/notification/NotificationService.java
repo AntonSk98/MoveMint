@@ -84,11 +84,10 @@ public class NotificationService implements INotificationService {
                 .streamUserDetails()
                 .filter(user -> shouldNotifyUserAbout(activityType).test(user))
                 .forEach(user -> {
-                    UserDeviceToken userDeviceToken = userDeviceTokenRepository.findByUserIdentity(user.getIdentity());
                     activityCommand.createForUserIdentifiedBy(user.getIdentity(), activityType);
                     Optional.ofNullable(pushNotifier)
                             .ifPresentOrElse(
-                                    notifier -> Optional.ofNullable(userDeviceToken).ifPresent(deviceToken ->  notifier.notifyClientBy(deviceToken, activityType)),
+                                    notifier -> userDeviceTokenRepository.findByUserIdentity(user.getIdentity()).ifPresent(deviceToken -> notifier.notifyClientBy(deviceToken, activityType)),
                                     () -> LOGGER.warn("No push notifier is configured! Push notification will not be sent to the client {}", user.getIdentity()));
                 });
     }

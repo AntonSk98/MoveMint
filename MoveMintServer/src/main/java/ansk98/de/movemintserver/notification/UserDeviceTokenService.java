@@ -1,6 +1,7 @@
 package ansk98.de.movemintserver.notification;
 
 import ansk98.de.movemintserver.user.IUserService;
+import ansk98.de.movemintserver.user.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,7 +26,13 @@ public class UserDeviceTokenService implements IUserDeviceTokenService {
     @Override
     @Transactional
     public void saveUserDeviceToken(DeviceTokenRequest deviceTokenRequest) {
-        UserDeviceToken userDeviceToken = UserDeviceToken.of(deviceTokenRequest.deviceToken(), userService.requireUser(Function.identity()));
-        userDeviceTokenRepository.save(userDeviceToken);
+        User user = userService.requireUser(Function.identity());
+        userDeviceTokenRepository.findByUserIdentity(user.getIdentity()).ifPresentOrElse(
+                token -> token.updateToken(deviceTokenRequest.deviceToken()),
+                () -> {
+                    UserDeviceToken userDeviceToken = UserDeviceToken.of(deviceTokenRequest.deviceToken(), user);
+                    userDeviceTokenRepository.save(userDeviceToken);
+                }
+        );
     }
 }

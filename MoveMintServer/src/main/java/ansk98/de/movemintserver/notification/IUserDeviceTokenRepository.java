@@ -2,6 +2,7 @@ package ansk98.de.movemintserver.notification;
 
 import org.springframework.data.repository.Repository;
 
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -11,7 +12,7 @@ import java.util.UUID;
  */
 public interface IUserDeviceTokenRepository extends Repository<UserDeviceToken, UUID> {
 
-    UserDeviceToken findByUserIdentity(String identity);
+    Optional<UserDeviceToken> findByUserIdentity(String identity);
 
     void save(UserDeviceToken userDeviceToken);
 }

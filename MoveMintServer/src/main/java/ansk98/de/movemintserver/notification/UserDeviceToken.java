@@ -2,6 +2,7 @@ package ansk98.de.movemintserver.notification;
 
 import ansk98.de.movemintserver.user.User;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -45,5 +46,9 @@ public class UserDeviceToken {
 
     public String getDeviceToken() {
         return deviceToken;
+    }
+
+    public void updateToken(@NotNull String deviceToken) {
+        this.deviceToken = deviceToken;
     }
 }

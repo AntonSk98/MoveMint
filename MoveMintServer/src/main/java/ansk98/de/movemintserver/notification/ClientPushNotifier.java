@@ -4,6 +4,7 @@ import ansk98.de.movemintserver.activities.common.ActivityType;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
+import com.google.firebase.messaging.Notification;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
@@ -38,7 +39,7 @@ public class ClientPushNotifier implements IClientPushNotifier {
         }
         Message message = Message.builder()
                 .setToken(userDeviceToken.getDeviceToken())
-                .putData("message", notificationProperties.getNotificationMessage(activityType))
+                .setNotification(Notification.builder().setTitle("hello").setBody(notificationProperties.getNotificationMessage(activityType)).build())
                 .build();
 
         try {
