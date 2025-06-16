@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">MoveMintUi</string>
+    <string name="title_activity_main">MoveMintUi</string>
+    <string name="package_name">ansk98.de</string>
+    <string name="custom_url_scheme">ansk98.de</string>
+</resources>

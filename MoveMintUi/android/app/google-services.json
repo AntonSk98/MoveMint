@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "505904605465",
+    "project_id": "movemint-eea7d",
+    "storage_bucket": "movemint-eea7d.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:505904605465:android:9f532b8eca7ca47a117d88",
+        "android_client_info": {
+          "package_name": "ansk98.de"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAY2a_9T1PACBC5UXKch9rInQKa0QDN4Ao"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

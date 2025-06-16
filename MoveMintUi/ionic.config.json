@@ -1,0 +1,7 @@
+{
+  "name": "MoveMintUi",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
