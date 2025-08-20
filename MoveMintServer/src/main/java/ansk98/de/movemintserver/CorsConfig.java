@@ -16,10 +16,10 @@ public class CorsConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("*")); // Allow all origins
-        config.setAllowedMethods(List.of("*")); // Allow all HTTP methods
-        config.setAllowedHeaders(List.of("*")); // Allow all headers
-        config.setAllowCredentials(false); // You can set this to true if needed
+        config.setAllowedOrigins(List.of("*"));
+        config.setAllowedMethods(List.of("*"));
+        config.setAllowedHeaders(List.of("*"));
+        config.setAllowCredentials(false);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);

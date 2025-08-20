@@ -1,7 +1,5 @@
 package ansk98.de.movemintserver.eventing;
 
-import ansk98.de.movemintserver.eventing.IEvent;
-import ansk98.de.movemintserver.eventing.IEventPublisher;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 

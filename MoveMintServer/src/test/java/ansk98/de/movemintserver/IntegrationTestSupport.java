@@ -1,14 +1,10 @@
 package ansk98.de.movemintserver;
 
-import ansk98.de.movemintserver.auth.AuthenticateUserCommand;
-import ansk98.de.movemintserver.auth.AuthenticationDto;
-import ansk98.de.movemintserver.auth.RegisterUserCommand;
-import ansk98.de.movemintserver.user.IUserService;
-import ansk98.de.movemintserver.user.UserDetails;
-import ansk98.de.movemintserver.user.UserDetailsParams;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.time.LocalDate;
+import java.time.ZoneId;
+
 import org.apache.commons.lang3.RandomUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -19,11 +15,16 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
-import static org.springframework.http.HttpHeaders.AUTHORIZATION;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import ansk98.de.movemintserver.auth.AuthenticateUserCommand;
+import ansk98.de.movemintserver.auth.AuthenticationDto;
+import ansk98.de.movemintserver.auth.RegisterUserCommand;
+import ansk98.de.movemintserver.user.IUserService;
+import ansk98.de.movemintserver.user.UserDetails;
+import ansk98.de.movemintserver.user.UserDetailsParams;
 
 public abstract class IntegrationTestSupport {
 

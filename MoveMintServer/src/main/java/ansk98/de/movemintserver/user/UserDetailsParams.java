@@ -1,11 +1,10 @@
 package ansk98.de.movemintserver.user;
 
-import ansk98.de.movemintserver.user.UserDetails;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Past;
-
 import java.time.LocalDate;
 import java.time.ZoneId;
+
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Past;
 
 /**
  * Object containing details of a user.

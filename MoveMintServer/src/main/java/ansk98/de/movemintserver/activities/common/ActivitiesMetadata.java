@@ -1,6 +1,5 @@
 package ansk98.de.movemintserver.activities.common;
 
-import ansk98.de.movemintserver.activities.common.ActivityType;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.util.List;

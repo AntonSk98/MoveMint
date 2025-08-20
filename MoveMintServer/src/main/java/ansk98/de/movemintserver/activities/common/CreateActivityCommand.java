@@ -1,7 +1,5 @@
 package ansk98.de.movemintserver.activities.common;
 
-import ansk98.de.movemintserver.activities.common.IActivity;
-
 /**
  * Command to create a new activity.
  *

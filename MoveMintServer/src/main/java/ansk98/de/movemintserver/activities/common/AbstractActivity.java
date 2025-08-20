@@ -1,6 +1,5 @@
 package ansk98.de.movemintserver.activities.common;
 
-import ansk98.de.movemintserver.activities.common.IActivity;
 import ansk98.de.movemintserver.eventing.DomainEventAware;
 import ansk98.de.movemintserver.eventing.activity.ActivityAcceptedEvent;
 import ansk98.de.movemintserver.eventing.activity.ActivityRejectedEvent;

@@ -1,7 +1,6 @@
 package ansk98.de.movemintserver.activities.stretching;
 
 import ansk98.de.movemintserver.activities.common.IActivityRepository;
-import ansk98.de.movemintserver.activities.stretching.StretchingActivity;
 
 
 /**

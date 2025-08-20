@@ -1,10 +1,8 @@
 package ansk98.de.movemintserver.eventing;
 
-import ansk98.de.movemintserver.eventing.IEvent;
-import ansk98.de.movemintserver.eventing.IEventPublisher;
-import jakarta.persistence.Transient;
-
 import java.util.Objects;
+
+import jakarta.persistence.Transient;
 
 /**
  * Adds support for domain entities to publish domain events.

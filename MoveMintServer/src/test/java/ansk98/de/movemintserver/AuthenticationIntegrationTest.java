@@ -1,6 +1,10 @@
 package ansk98.de.movemintserver;
 
-import ansk98.de.movemintserver.auth.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.time.ZoneId;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,11 +17,12 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.time.ZoneId;
-
-import static org.springframework.http.HttpHeaders.AUTHORIZATION;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import ansk98.de.movemintserver.auth.AuthenticateUserCommand;
+import ansk98.de.movemintserver.auth.AuthenticationDto;
+import ansk98.de.movemintserver.auth.JwtManager;
+import ansk98.de.movemintserver.auth.RefreshTokenCommand;
+import ansk98.de.movemintserver.auth.RegisterUserCommand;
+import ansk98.de.movemintserver.auth.UserClaims;
 
 @SpringBootTest
 @AutoConfigureMockMvc

@@ -1,7 +1,5 @@
 package ansk98.de.movemintserver.eventing.user;
 
-import ansk98.de.movemintserver.eventing.user.AbstractUserEvent;
-
 /**
  * Event published before user is deleted.
  *

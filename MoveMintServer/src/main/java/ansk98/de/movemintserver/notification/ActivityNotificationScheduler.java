@@ -1,7 +1,5 @@
 package ansk98.de.movemintserver.notification;
 
-import ansk98.de.movemintserver.notification.IActivityNotificationScheduler;
-import ansk98.de.movemintserver.notification.INotificationService;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 

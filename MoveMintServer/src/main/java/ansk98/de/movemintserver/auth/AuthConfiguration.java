@@ -1,7 +1,5 @@
 package ansk98.de.movemintserver.auth;
 
-import ansk98.de.movemintserver.auth.JwtAuthenticationFilter;
-import ansk98.de.movemintserver.user.IUserService;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,6 +13,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import ansk98.de.movemintserver.user.IUserService;
 
 /**
  * Authentication configuration.
