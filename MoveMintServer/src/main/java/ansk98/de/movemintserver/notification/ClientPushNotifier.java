@@ -39,7 +39,7 @@ public class ClientPushNotifier implements IClientPushNotifier {
         }
         Message message = Message.builder()
                 .setToken(userDeviceToken.getDeviceToken())
-                .setNotification(Notification.builder().setTitle("hello").setBody(notificationProperties.getNotificationMessage(activityType)).build())
+                .setNotification(Notification.builder().setBody(notificationProperties.getNotificationMessage(activityType)).build())
                 .build();
 
         try {
