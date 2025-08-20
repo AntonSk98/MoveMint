@@ -7,6 +7,8 @@ import ansk98.de.movemintserver.coaching.ExerciseRoutine;
 import ansk98.de.movemintserver.coaching.IExerciseCoachClient;
 import ansk98.de.movemintserver.notification.IActivityNotificationScheduler;
 import ansk98.de.movemintserver.notification.IClientPushNotifier;
+import ansk98.de.movemintserver.notification.IUserDeviceTokenRepository;
+import ansk98.de.movemintserver.notification.UserDeviceToken;
 import ansk98.de.movemintserver.settings.SettingsParams;
 import ansk98.de.movemintserver.user.IUserRepository;
 import ansk98.de.movemintserver.user.NotificationUserProjection;
@@ -33,6 +35,7 @@ import java.util.UUID;
 import java.util.stream.Stream;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -52,6 +55,8 @@ public class NotificationIntegrationTest extends IntegrationTestSupport {
     private IUserRepository userRepository;
     @MockitoSpyBean
     private IActivityServiceDelegate activityService;
+    @MockitoSpyBean
+    private IUserDeviceTokenRepository userDeviceTokenRepository;
 
     @MockitoBean
     private IClientPushNotifier clientPushNotifier;
@@ -170,6 +175,9 @@ public class NotificationIntegrationTest extends IntegrationTestSupport {
                 ))
         );
 
+        UserDeviceToken deviceTokenMock = Mockito.mock(UserDeviceToken.class);
+        when(userDeviceTokenRepository.findByUserIdentity(Mockito.anyString())).thenReturn(Optional.of(deviceTokenMock));
+
         SettingsParams.ActivityDetails activityDetailsNotification = new SettingsParams.ActivityDetails(
                 true,
                 true,
@@ -204,6 +212,7 @@ public class NotificationIntegrationTest extends IntegrationTestSupport {
         activityNotificationScheduler.sendStretchingActivityNotification();
         verify(clientPushNotifier, times(2)).notifyClientBy(any(), eq(ActivityType.STRETCHING_ACTIVITY));
         Mockito.reset(activityService);
+        Mockito.reset(userDeviceTokenRepository);
     }
 
     private void defineSettings(String identity, SettingsParams settingsParams) {
