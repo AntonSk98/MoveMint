@@ -4,6 +4,7 @@
 
 export const environment = {
   production: false,
+  host: "http://localhost:8080",
   firebase: {
     apiKey: "AIzaSyBFJgAxH_K0ZW7b1GURChJHrj1piuhVVXM",
     authDomain: "movemint-eea7d.firebaseapp.com",

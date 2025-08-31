@@ -1,5 +1,6 @@
 export const environment = {
   production: true,
+  host: "https://your-api-url.com",
   firebase: {
     apiKey: "AIzaSyBFJgAxH_K0ZW7b1GURChJHrj1piuhVVXM",
     authDomain: "movemint-eea7d.firebaseapp.com",

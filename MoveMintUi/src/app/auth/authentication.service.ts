@@ -51,7 +51,7 @@ export class AuthenticationService {
   refreshToken(): void {
   }
 
-  isAuthenticated() {
+  isAuthenticated(): boolean {
     return false;
   }
 }

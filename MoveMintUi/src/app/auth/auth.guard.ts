@@ -8,7 +8,6 @@ import {
   RouterStateSnapshot
 } from "@angular/router";
 import {AuthenticationService} from "./authentication.service";
-import {LOGIN_PATH} from "./paths";
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +20,7 @@ export class AuthGuard implements CanActivate {
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): MaybeAsync<GuardResult> {
 
     if (!this._authService.isAuthenticated()) {
-      return this._router.navigate([LOGIN_PATH])
+      return this._router.navigate(['/login'])
     }
 
     return true;
